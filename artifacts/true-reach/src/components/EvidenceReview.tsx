@@ -47,14 +47,14 @@ export function EvidenceReview({ analysis, insights }: Props) {
           <div className="insight-panel">
             <span className="mono eyebrow">ON SCREEN / BRAND-REFERENCE MATCH</span>
             <h3>Possible product or logo visibility</h3>
-            <p>Only windows supported by at least two consecutive similar frames are estimated. A match is not proof that a product or logo appears.</p>
+             <p>Oriane supplies frame similarity scores. This view groups at least two adjacent scores ≥0.80 within 0.8s. The first and last timestamps are not a visibility-duration estimate.</p>
             {insights.visualWindows.length ? insights.visualWindows.map((window, index) =>
               <button type="button" className="insight-row visual-insight" key={`${window.start}-${index}`} onClick={() => { setPlaying(false); setShowSourcePlayer(false); seek(window.peak.timestamp); document.getElementById('frame-viewer')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }} data-testid={`button-visual-window-${index}`}>
                 <img src={window.peak.imageUrl} alt={`Candidate source frame sampled at ${window.peak.timestamp.toFixed(1)} seconds`} loading="lazy" />
-                <span><strong>{window.start.toFixed(1)}–{window.end.toFixed(1)}s <small>estimated window</small></strong><em>{window.sampleCount} adjacent matched samples · inspect frame</em></span>
+                 <span><strong>{window.start.toFixed(2)}–{window.end.toFixed(2)}s <small>sample timestamps</small></strong><em>{window.sampleCount} adjacent matched samples · inspect frame</em></span>
                 <ArrowRight size={16} aria-hidden="true" />
               </button>
-            ) : <p className="empty-evidence">No sustained visual window can be estimated from these samples. This does not establish that the product was absent.</p>}
+             ) : <p className="empty-evidence">No adjacent high-similarity samples were returned. This does not establish that the product was absent.</p>}
           </div>
           <div className="insight-panel">
             <span className="mono eyebrow">SPEECH / PRODUCT USE OR COMPARISON</span>
@@ -75,7 +75,7 @@ export function EvidenceReview({ analysis, insights }: Props) {
             {tiktokId && <button type="button" className="source-toggle mono" onClick={() => { setPlaying(false); setShowSourcePlayer((value) => !value); }}>{showSourcePlayer ? 'VIEW SAMPLED FRAMES' : 'WATCH SOURCE VIDEO'}</button>}
             {showSourcePlayer && tiktokId ? (
               <div className="source-player">
-                <iframe title="Original TikTok video, provided by TikTok" src={`https://www.tiktok.com/embed/v2/${tiktokId}`} loading="lazy" allow="fullscreen; autoplay; encrypted-media" allowFullScreen />
+                 <iframe title="Original TikTok video, provided by TikTok" src={`https://www.tiktok.com/player/v1/${tiktokId}?controls=1`} loading="lazy" allow="fullscreen; autoplay; encrypted-media" allowFullScreen />
                 <p>Source playback is supplied by TikTok and cannot sync to the evidence timeline. If it does not load here, <a href={analysis.videoUrl} target="_blank" rel="noopener noreferrer">open the original video</a>.</p>
               </div>
             ) : (

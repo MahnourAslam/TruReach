@@ -14,3 +14,9 @@ For deliverable reviews, keep example contract criteria separate from a real cam
 **Why:** The intended pitch compares creative compliance with campaign performance, but these are different evidence sources. Presenting an illustrative contract or brand-side outcomes as measured facts would make the demo misleading.
 
 **How to apply:** Label example criteria as illustrative, attribute indexed public engagement to Oriane, and show unavailable creator analytics and brand tracking as requiring their respective data connections.
+
+TikTok's official iframe can render a public post preview yet still refuse to play inside the Replit browser preview. Both ordinary embed and official player variants failed playback in the observed environment; a visible play button is not evidence that the video works.
+
+**Why:** Third-party player/network policies are outside the app's control, and sampled frames are not a fallback video file.
+
+**How to apply:** Keep a prominent link to open the original post on TikTok, never claim guaranteed in-app playback, and only promise reliable synchronized playback when a rights-cleared video file is available.

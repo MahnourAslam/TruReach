@@ -148,7 +148,7 @@ export function normalizeAnalysis(
       firstSpokenMentionSeconds: spokenEvents[0]?.start ?? null,
       captionMentionsBrand: brand ? occurrences(content.caption ?? "", brand) > 0 : null,
       visualDurationNote:
-        "The on-screen figure is a proxy built from adjacent similarity-matched sampled frames. It does not confirm a product or logo, and exact visibility duration cannot be determined without continuous video.",
+        "Oriane returns sampled frames with similarity scores, not continuous product/logo tracking. The displayed timestamps are the first and last samples in a matching group, not measured visibility time. Confirm product appearance and any duration requirement against the original full video.",
     },
     transcriptChunks,
     frames,

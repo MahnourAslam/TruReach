@@ -16,7 +16,7 @@ export function getContractReadout(
   analysis: AnalysisResult,
   insights: ReturnType<typeof getExposureInsights>,
 ): { checks: Check[]; platformMetrics: Metric[]; trackingMetrics: Metric[] } {
-  const visual = insights.visualEstimatedSeconds;
+  const matched = insights.visualWindows;
   const spoken = analysis.summary.spokenMentionCount;
   const closing = analysis.events.find((event) => event.type === 'closing_phrase');
 
@@ -25,10 +25,12 @@ export function getContractReadout(
       {
         id: 'visibility',
         requirement: 'Product clearly visible for at least 5 seconds',
-        result: visual == null ? 'Cannot verify from samples' : `~${visual.toFixed(1)}s visual candidate window`,
-        detail: visual == null
-          ? 'No sustained similarity window in the sampled frames. That does not prove the product was absent; continuous footage is needed to check the 5-second requirement.'
-          : 'Similarity-matched sampled frames, not confirmed product or logo visibility. The 5-second requirement cannot be passed or failed from this estimate.',
+        result: matched.length === 0
+          ? 'Visibility time not measurable'
+          : `${matched.reduce((sum, window) => sum + window.sampleCount, 0)} matched samples · ${matched.map((window) => `${window.start.toFixed(2)}–${window.end.toFixed(2)}s`).join(', ')}`,
+        detail: matched.length === 0
+          ? 'No adjacent high-similarity samples were found. That does not prove the product was absent; continuous footage is needed to check the 5-second requirement.'
+          : 'These are Oriane similarity scores on sampled frames, not confirmed product or logo detections. The timestamps bracket samples, not a visibility duration. Review the full video to assess the 5-second requirement.',
         status: 'review',
       },
       {
