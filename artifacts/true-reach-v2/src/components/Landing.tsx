@@ -45,9 +45,9 @@ export function Landing({ videoUrl, brand, requirements, onVideoUrlChange, onBra
       <main>
         <section className="container hero" aria-labelledby="landing-title">
           <div className="hero-copy">
-            <div className="section-index mono"><span className="dash" /> THE CREATOR POST CHECKER</div>
-            <h1 id="landing-title" className="serif">Creator post<br /><em>check</em></h1>
-            <p className="hero-description">Check a creator’s post against your brief. See whether they said your brand name, showed the product, and included the disclosure you asked for.</p>
+            <div className="section-index mono"><span className="dash" /> CREATOR CAMPAIGN REVIEW</div>
+            <h1 id="landing-title" className="serif">What’s in the<br /><em>post?</em></h1>
+            <p className="hero-description">Compare it with your brief using timestamped brand mentions, possible product appearances, and disclosure checks.</p>
             <form className="form-panel" onSubmit={(event) => { event.preventDefault(); onAnalyze(); }}>
               <label className="form-label mono" htmlFor="video-url">Paste a TikTok or Instagram post link</label>
               <div className="input-row">
