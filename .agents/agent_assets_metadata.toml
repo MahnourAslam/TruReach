@@ -1,0 +1,30 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "HDk4WqDmGFz07em0xfnQO"
+uri = "file://attached_assets/oriane-test/cerave-test-report.json"
+type = "unspecified"
+title = "Oriane CeraVe Test Results"
+description = "Raw evidence from an indexed TikTok: transcript chunks, engagement counts, visual-match timestamps, and similarity scores."
+logical_id = "76f94854-c47a-4042-8b8e-a60e8b44dfde"
+content_hash = "sha256:c005f339a05fbed6ccac123f7808724ff822164ed9866e5bc81923cb6de95431"
+size = 15587
+mtime_ms = 1790505288841
+storage_uri = "gcs://replit-rams-assets-riker/rams/assets/repl:2878c4e7-16c5-42e1-a298-e2789aeede4d/76f94854-c47a-4042-8b8e-a60e8b44dfde/07a27424-0365-4c32-9ed4-96a9de5f814b"
+storage_version_token = "1790505304368922"
+content_type = "application/octet-stream"
+
+[[outputs]]
+id = "hVJmZSHuIVcqYLaQmqViu"
+uri = "file://attached_assets/oriane-test/cerave-logo.png"
+type = "image"
+title = "CeraVe Logo Used for Matching"
+description = "Public CeraVe logo image used to create the Oriane visual-search asset."
+logical_id = "85380e76-95a9-449e-a1b1-82d9807c6133"
+content_hash = "sha256:67e912ddaf0f61a6c8b356c67bcc196d1820f6560a31e31d6ebabf302c972f60"
+size = 103646
+mtime_ms = 1790505277433
+storage_uri = "gcs://replit-rams-assets-riker/rams/assets/repl:2878c4e7-16c5-42e1-a298-e2789aeede4d/85380e76-95a9-449e-a1b1-82d9807c6133/4612e024-67c2-404e-980f-d92e0b6d7c2b"
+storage_version_token = "1790505305117987"
+content_type = "image/png"

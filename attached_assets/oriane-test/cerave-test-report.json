@@ -1,0 +1,386 @@
+{
+  "testedAt": "2026-09-27T10:34:38.878Z",
+  "video": {
+    "url": "https://www.tiktok.com/@mualesandro/video/7687301269223968013",
+    "platform": "tiktok",
+    "platformId": "7687301269223968013",
+    "orianeContentId": "cnt_f52f470ea85fe389fc6dda606011",
+    "creator": "@mualesandro"
+  },
+  "brand": "CeraVe",
+  "logo": {
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/CeraVe_logo.png/960px-CeraVe_logo.png",
+    "localFile": "attached_assets/oriane-test/cerave-logo.png"
+  },
+  "assetIds": {
+    "image": "ast_FaMOyUVSnOZmhhDCtuV1xGmnXGGg",
+    "text": "ast_IxNUg0GCVFCp8vRgrSP6tKHFht5T"
+  },
+  "matched": true,
+  "metadata": {
+    "pagination": {
+      "offset": 0,
+      "limit": 5,
+      "totalCount": 1,
+      "aiSearchAnchor": "jZNNT9wwEIb_y5ydaOzEXzl2abXVUi1qET2gCIVkkk27a1PHsFDEf0cJS6UekCwf53lfP3OYZ3igMI3eQVUyOPiOoIKp9YGAwZ97Ck_rZtpBBWItzx7vbjbi26V--vT3bHXxc7M7vzy_2ovf4638tQlYige53a5KYBCop0CupR9z1QTVNebGWjQFam1RSyUKhrkptdLcGqmEEgI1w1xZqbiWUknNrcKSYa614dZKWZTGKiN5zWB03dguveCDy-jxjsI4_5dN1IR2l7XeRXJxyg6ohMpaLIClomUKqheUp6MiHU1y1emuJt3VpLuadFeT7mrTXW26qz251gyij81-5e9dhIozaIYh0NDE0bsJque38dVIx-nESF0inmJfXaTQtAv8XlH8m352QzPQgVz83kS6oLDUQIU5CqFKg6ZQolC2KMxHiS9-v_dHCm8p5Nz89-wLg-PoOn_c9v1EESqcl-8oULce43wP11wwaF286aXoS43UGNlTYWzfqq5rFCrkHOr6vWhZYw7y-uUV"
+    },
+    "requestId": "req_sndvFwOjbuMGGA88FNJ9O9voJvZ1",
+    "executionTime": 622,
+    "timestamp": 1790505278859
+  },
+  "evidence": {
+    "caption": "Which one is your fave?? #skincare #skincareasmr #acne #acneproneskin #cerave ",
+    "publishedAt": "2026-09-19T17:35:19.000Z",
+    "durationSeconds": 27,
+    "viewsCount": 57400,
+    "likesCount": 1256,
+    "commentsCount": 26,
+    "sharesCount": 18,
+    "interactionsCount": 1300,
+    "engagementRatePerViews": 2.264808362369338,
+    "transcript": "What's better for your skin? CeraVe or Cetaphil? Well, we're about to find out because over the next couple weeks, I'll be putting this to the test by using only CeraVe on one side of my face and Cetaphil on the other. I don't know about you, but for the longest time, I thought they were part of the same company, but turns out they're not. CeraVe is owned by beauty conglomerate L'Oreal, and Cetaphil is owned by Valderma Laboratories, a Swiss pharmaceutical company. Both brands target people with sensitive skin. However, I'm really curious if we'll notice any difference between the two sides of my face by the end of this experiment. So stay tuned for the final result.",
+    "transcriptChunks": [
+      {
+        "startSeconds": 0.022,
+        "endSeconds": 2.663,
+        "text": "What's better for your skin? CeraVe or Cetaphil?"
+      },
+      {
+        "startSeconds": 2.763,
+        "endSeconds": 4.822,
+        "text": "Well, we're about to find out because over the next couple weeks,"
+      },
+      {
+        "startSeconds": 4.923,
+        "endSeconds": 9.663,
+        "text": "I'll be putting this to the test by using only CeraVe on one side of my face and Cetaphil on the other."
+      },
+      {
+        "startSeconds": 9.763,
+        "endSeconds": 12.503,
+        "text": "I don't know about you, but for the longest time, I thought they were part of the same company,"
+      },
+      {
+        "startSeconds": 12.663,
+        "endSeconds": 13.603,
+        "text": "but turns out they're not."
+      },
+      {
+        "startSeconds": 13.743,
+        "endSeconds": 15.343,
+        "text": "CeraVe is owned by beauty conglomerate L'Oreal,"
+      },
+      {
+        "startSeconds": 15.603,
+        "endSeconds": 19.183,
+        "text": "and Cetaphil is owned by Valderma Laboratories, a Swiss pharmaceutical company."
+      },
+      {
+        "startSeconds": 19.303,
+        "endSeconds": 21.043,
+        "text": "Both brands target people with sensitive skin."
+      },
+      {
+        "startSeconds": 21.242,
+        "endSeconds": 25.803,
+        "text": "However, I'm really curious if we'll notice any difference between the two sides of my face by the end of this experiment."
+      },
+      {
+        "startSeconds": 26.043,
+        "endSeconds": 27.742,
+        "text": "So stay tuned for the final result."
+      }
+    ],
+    "matchedQueries": [],
+    "frames": [
+      {
+        "id": "med_a6fca1ec88d67ab319ed8cf5d986",
+        "position": 1,
+        "timestampSeconds": 0.03,
+        "visualSimilarityScore": 0.858259379863739,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/1_0.03.webp"
+      },
+      {
+        "id": "med_6b0f5f3d3087cc0a5ab2bf902ea5",
+        "position": 2,
+        "timestampSeconds": 1.5,
+        "visualSimilarityScore": 0.9288475513458252,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/2_1.50.webp"
+      },
+      {
+        "id": "med_5a560beedf0d5f78e083c53e749f",
+        "position": 3,
+        "timestampSeconds": 4.13,
+        "visualSimilarityScore": 0.951100766658783,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/3_4.13.webp"
+      },
+      {
+        "id": "med_3051382e1c0a444210cb25a53009",
+        "position": 4,
+        "timestampSeconds": 4.2,
+        "visualSimilarityScore": 0.9019320607185364,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/4_4.20.webp"
+      },
+      {
+        "id": "med_6b860df3ce341391521578ed3d74",
+        "position": 5,
+        "timestampSeconds": 4.23,
+        "visualSimilarityScore": 0.9537736773490906,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/5_4.23.webp"
+      },
+      {
+        "id": "med_f62b5f79af3a1b4100f09a89f888",
+        "position": 6,
+        "timestampSeconds": 4.53,
+        "visualSimilarityScore": 0.8685965538024902,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/6_4.53.webp"
+      },
+      {
+        "id": "med_fcda74bf14172de8598afa2d9c74",
+        "position": 7,
+        "timestampSeconds": 4.57,
+        "visualSimilarityScore": 0.8243961334228516,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/7_4.57.webp"
+      },
+      {
+        "id": "med_05b2deb041f53036e647f2e6825a",
+        "position": 8,
+        "timestampSeconds": 5.17,
+        "visualSimilarityScore": 0.7176886796951294,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/8_5.17.webp"
+      },
+      {
+        "id": "med_5745a13015481fc4b659a6f75e3a",
+        "position": 9,
+        "timestampSeconds": 5.2,
+        "visualSimilarityScore": 0.6292005181312561,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/9_5.20.webp"
+      },
+      {
+        "id": "med_22e74aa90b3bdc47399385aa161a",
+        "position": 10,
+        "timestampSeconds": 5.27,
+        "visualSimilarityScore": 0.6183781623840332,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/10_5.27.webp"
+      },
+      {
+        "id": "med_18bd2e39db953dcdd163aa424380",
+        "position": 11,
+        "timestampSeconds": 5.3,
+        "visualSimilarityScore": 0.610625147819519,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/11_5.30.webp"
+      },
+      {
+        "id": "med_8000b0f9a1554b00a7662031247d",
+        "position": 12,
+        "timestampSeconds": 8.2,
+        "visualSimilarityScore": 0.6544432640075684,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/12_8.20.webp"
+      },
+      {
+        "id": "med_dc491234aeee0b37d8f8270dfcaa",
+        "position": 13,
+        "timestampSeconds": 8.63,
+        "visualSimilarityScore": 0.6881813406944275,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/13_8.63.webp"
+      },
+      {
+        "id": "med_778840f5207282b9301f44016f4e",
+        "position": 14,
+        "timestampSeconds": 8.67,
+        "visualSimilarityScore": 0.6526008248329163,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/14_8.67.webp"
+      },
+      {
+        "id": "med_da2cb3ba3c921648b74d518da374",
+        "position": 15,
+        "timestampSeconds": 9.33,
+        "visualSimilarityScore": 0.6715289354324341,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/15_9.33.webp"
+      },
+      {
+        "id": "med_5bb3ba7973c0703644c1feb963a9",
+        "position": 16,
+        "timestampSeconds": 11.67,
+        "visualSimilarityScore": 0.609512448310852,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/16_11.67.webp"
+      },
+      {
+        "id": "med_f453c5e0f7ee8ff2ef60a212a4e0",
+        "position": 17,
+        "timestampSeconds": 14.47,
+        "visualSimilarityScore": 0.757961630821228,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/17_14.47.webp"
+      },
+      {
+        "id": "med_e529e883c03949a1e0be63176c46",
+        "position": 18,
+        "timestampSeconds": 16.23,
+        "visualSimilarityScore": 0.6098548173904419,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/18_16.23.webp"
+      },
+      {
+        "id": "med_4fa8c1f5fa956bc485ca6c0f0618",
+        "position": 19,
+        "timestampSeconds": 16.73,
+        "visualSimilarityScore": 0.5983130931854248,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/19_16.73.webp"
+      },
+      {
+        "id": "med_a37c744ea5a5095d4a896aa5e586",
+        "position": 20,
+        "timestampSeconds": 17.3,
+        "visualSimilarityScore": 0.5712063908576965,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/20_17.30.webp"
+      },
+      {
+        "id": "med_704c9541b215442e32217b64e539",
+        "position": 21,
+        "timestampSeconds": 21.83,
+        "visualSimilarityScore": 0.6120396256446838,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/21_21.83.webp"
+      },
+      {
+        "id": "med_11e757324d17a42aed1b56fc3cb9",
+        "position": 22,
+        "timestampSeconds": 22.47,
+        "visualSimilarityScore": 0.6385239362716675,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/22_22.47.webp"
+      },
+      {
+        "id": "med_ceafd8d946d2266ca7b22c94724e",
+        "position": 23,
+        "timestampSeconds": 24.67,
+        "visualSimilarityScore": 0.5707578659057617,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/23_24.67.webp"
+      },
+      {
+        "id": "med_d5443e125e1027b91b91ad419ad7",
+        "position": 24,
+        "timestampSeconds": 24.7,
+        "visualSimilarityScore": 0.6256217360496521,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/24_24.70.webp"
+      },
+      {
+        "id": "med_608da0daa81b9c0aacc98ecee616",
+        "position": 25,
+        "timestampSeconds": 24.73,
+        "visualSimilarityScore": 0.7206103801727295,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/25_24.73.webp"
+      },
+      {
+        "id": "med_405cd6ceb2c597316b369cc7c10f",
+        "position": 26,
+        "timestampSeconds": 24.83,
+        "visualSimilarityScore": 0.609641969203949,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/26_24.83.webp"
+      },
+      {
+        "id": "med_293dacad198b22ab37bc78804ca1",
+        "position": 27,
+        "timestampSeconds": 24.87,
+        "visualSimilarityScore": 0.6520739793777466,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/27_24.87.webp"
+      },
+      {
+        "id": "med_917d27d656e7f9e2f55f042aaeb5",
+        "position": 28,
+        "timestampSeconds": 24.9,
+        "visualSimilarityScore": 0.9904550313949585,
+        "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/28_24.90.webp"
+      }
+    ]
+  },
+  "separateVisualSearches": {
+    "imageLogo": {
+      "frameCount": 28,
+      "frames": [
+        {
+          "timestampSeconds": 24.9,
+          "score": 0.9904550313949585,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/28_24.90.webp"
+        },
+        {
+          "timestampSeconds": 4.23,
+          "score": 0.9537736773490906,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/5_4.23.webp"
+        },
+        {
+          "timestampSeconds": 4.13,
+          "score": 0.951100766658783,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/3_4.13.webp"
+        },
+        {
+          "timestampSeconds": 4.2,
+          "score": 0.9019320607185364,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/4_4.20.webp"
+        },
+        {
+          "timestampSeconds": 4.53,
+          "score": 0.8685965538024902,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/6_4.53.webp"
+        },
+        {
+          "timestampSeconds": 1.5,
+          "score": 0.8656719923019409,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/2_1.50.webp"
+        },
+        {
+          "timestampSeconds": 0.03,
+          "score": 0.858259379863739,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/1_0.03.webp"
+        },
+        {
+          "timestampSeconds": 4.57,
+          "score": 0.7884076833724976,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/7_4.57.webp"
+        }
+      ]
+    },
+    "textDescription": {
+      "frameCount": 28,
+      "frames": [
+        {
+          "timestampSeconds": 1.5,
+          "score": 0.9288475513458252,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/2_1.50.webp"
+        },
+        {
+          "timestampSeconds": 4.23,
+          "score": 0.9193345308303833,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/5_4.23.webp"
+        },
+        {
+          "timestampSeconds": 4.2,
+          "score": 0.8556239008903503,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/4_4.20.webp"
+        },
+        {
+          "timestampSeconds": 0.03,
+          "score": 0.8346195220947266,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/1_0.03.webp"
+        },
+        {
+          "timestampSeconds": 4.57,
+          "score": 0.8243961334228516,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/7_4.57.webp"
+        },
+        {
+          "timestampSeconds": 4.53,
+          "score": 0.7993642687797546,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/6_4.53.webp"
+        },
+        {
+          "timestampSeconds": 4.13,
+          "score": 0.7545989155769348,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/3_4.13.webp"
+        },
+        {
+          "timestampSeconds": 14.47,
+          "score": 0.6601701974868774,
+          "url": "https://oriane-frames.s3.us-east-1.amazonaws.com/tiktok/7687301269223968013/17_14.47.webp"
+        }
+      ]
+    }
+  }
+}
