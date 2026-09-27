@@ -1,6 +1,6 @@
-import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Mic2, ScanEye, MoveUpRight } from 'lucide-react';
 import type { AnalysisResult } from '@workspace/api-client-react';
-import { ContractScorecard } from './ContractScorecard';
+import { ContractScorecard, OriginalPostDisclosure } from './ContractScorecard';
 import { EvidenceReview } from './EvidenceReview';
 import { formatDate, formatNumber, formatTime } from '../types/analysis';
 import { getExposureInsights } from '../types/exposure';
@@ -40,6 +40,22 @@ export function AnalysisReport({ analysis, onBack, isExample }: Props) {
   const { summary } = analysis;
   const insights = getExposureInsights(analysis);
   const deliveryChecks = (analysis as { deliveryChecks?: DeliveryCheckLike[] }).deliveryChecks ?? [];
+  const firstAppearance = analysis.deliveryChecks
+    .filter(check => check.id === 'visual-first-appearance' || check.id === 'verbal-first-mention')
+    .flatMap(check => check.timestamps.map(timestamp => timestamp.start))
+    .filter(time => Number.isFinite(time) && time >= 0)
+    .sort((a, b) => a - b)[0];
+  const visibilitySeconds = insights.visualWindows.reduce((sum, window) => sum + Math.max(0, window.end - window.start), 0);
+  const firstCta = analysis.events.filter(event => event.type === 'closing_phrase' && Number.isFinite(event.start)).sort((a, b) => a.start - b.start)[0];
+  const keyEvents = analysis.events
+    .filter(event => Number.isFinite(event.start) && event.start >= 0 && (
+      event.type === 'spoken_mention' && (!!analysis.brand || !!event.text?.trim()) ||
+      event.type === 'visual_candidate' && (!!event.imageUrl || !!event.text?.trim()) ||
+      event.type === 'closing_phrase' && (!!event.text?.trim() || !!event.label?.trim())
+    ))
+    .sort((a, b) => a.start - b.start);
+  const creativeSegments = [...analysis.creativeSegments].filter(segment => Number.isFinite(segment.start) && Number.isFinite(segment.end) && segment.end > segment.start).sort((a, b) => a.start - b.start);
+  const creativeDuration = Math.max(1, analysis.durationSeconds ?? 0, ...creativeSegments.map(segment => segment.end));
 
   return (
     <main>
@@ -60,17 +76,38 @@ export function AnalysisReport({ analysis, onBack, isExample }: Props) {
       </div>
       <div className="container report-body">
         <VerdictBanner checks={deliveryChecks} />
-        <ContractScorecard analysis={analysis} insights={insights} />
-        <section className="summary-section" aria-labelledby="summary-title">
-             <div className="section-title-row"><h2 id="summary-title">What we found in the post</h2><p>These observations help you review delivery, not replace watching the post.</p></div>
-          <div className="summary-grid">
-             <div className="stat stat-feature"><span className="mono">Brand appeared on screen</span><div><div className="stat-value" data-testid="text-visual-estimate">{insights.visualWindows.reduce((sum, window) => sum + window.sampleCount, 0)}<small> possible frames</small></div><span className="stat-label">Frames that may show the brand. Confirm in the original post.</span></div></div>
-             <div className="stat"><span className="mono">Talked about the product</span><div><div className="stat-value" data-testid="text-product-talk">{insights.productSpeechSeconds == null ? '—' : `~${insights.productSpeechSeconds.toFixed(1)}s`}</div><span className="stat-label">Approximate time discussing use, benefits or comparisons.</span></div></div>
-             <div className="stat"><span className="mono">Frames to review</span><div><div className="stat-value" data-testid="text-visual-candidates">{analysis.brand ? formatNumber(insights.matchedSampleCount) : '—'}<small> frames</small></div><span className="stat-label">{insights.visualWindows.length ? `Possible appearances around ${insights.visualWindows.slice(0, 2).map(window => formatTime(window.start)).join(' and ')}.` : 'No matching frames were found.'}</span></div></div>
-             <div className="stat"><span className="mono">Said brand name out loud</span><div><div className="stat-value" data-testid="text-spoken-count">{analysis.brand ? summary.spokenMentionCount : '—'}<small> times</small></div><span className="stat-label">{summary.firstSpokenMentionSeconds != null ? `First heard at ${formatTime(summary.firstSpokenMentionSeconds)}.` : analysis.brand ? 'No mention found in the transcript.' : 'Add a brand to check spoken mentions.'}</span></div></div>
+        <section className="report-block" aria-labelledby="summary-title">
+          <div className="report-block-heading"><div><span className="mono eyebrow">THE FIVE THINGS TO KNOW</span><h2 id="summary-title">At a glance</h2></div><p>The essential timing and delivery signals from this post.</p></div>
+          <div className="hero-metrics">
+            <div className="hero-metric"><strong className="hero-metric-number">{firstAppearance == null ? '—' : formatTime(firstAppearance)}</strong><div><span className="hero-metric-caption">First brand appearance</span><span className="hero-metric-note">First time seen or heard</span></div></div>
+            <div className="hero-metric"><strong className="hero-metric-number" data-testid="text-visual-estimate">{visibilitySeconds.toFixed(1)}s</strong><div><span className="hero-metric-caption">Estimated brand visibility</span><span className="hero-metric-note" data-testid="text-visual-candidates">{analysis.brand ? `${formatNumber(insights.matchedSampleCount)} possible frames checked` : 'Add a brand to check frames'}</span></div></div>
+            <div className="hero-metric"><strong className="hero-metric-number" data-testid="text-product-talk">{insights.productSpeechSeconds == null ? '—' : `${Math.round(insights.productSpeechSeconds)}s`}</strong><div><span className="hero-metric-caption">Creator talked about the product</span><span className="hero-metric-note">From the speech transcript</span></div></div>
+            <div className="hero-metric"><strong className="hero-metric-number">{firstCta ? formatTime(firstCta.start) : '—'}</strong><div><span className="hero-metric-caption">Call to action timing</span><span className="hero-metric-note">First closing message</span></div></div>
+            <div className="hero-metric"><strong className="hero-metric-number" data-testid="text-spoken-count">{summary.spokenMentionCount}</strong><div><span className="hero-metric-caption">Times brand was said out loud</span><span className="hero-metric-note">Based on the transcript</span></div></div>
           </div>
         </section>
-        <EvidenceReview key={analysis.videoUrl + analysis.fetchedAt} analysis={analysis} insights={insights} />
+        <OriginalPostDisclosure analysis={analysis} insights={insights} />
+        <section className="report-block" aria-labelledby="event-log-title">
+          <div className="report-block-heading"><div><span className="mono eyebrow">IN ORDER OF APPEARANCE</span><h2 id="event-log-title">What happened, when</h2></div><p>A timestamped record of brand mentions, possible product appearances and the call to action.</p></div>
+          <div className="event-log">
+            {keyEvents.length ? keyEvents.map(event => (
+              <div className="event-log-row" key={event.id}>
+                <time className="event-log-time mono">{formatTime(event.start)}</time>
+                <span className={`event-log-icon ${event.type}`} aria-hidden="true">{event.type === 'spoken_mention' ? <Mic2 size={21} /> : event.type === 'visual_candidate' ? <ScanEye size={21} /> : <MoveUpRight size={21} />}</span>
+                <div className="event-log-copy"><strong>{event.type === 'spoken_mention' ? analysis.brand ? `Said “${analysis.brand}”` : 'Brand name said out loud' : event.type === 'visual_candidate' ? 'Product spotted on screen' : 'Call to action'}</strong><span>{event.type === 'visual_candidate' ? 'Possible match — confirm in the original post.' : event.type === 'closing_phrase' && event.text ? `“${event.text}”` : event.type === 'spoken_mention' && event.text ? `“${event.text}”` : 'Found in the post.'}</span></div>
+              </div>
+            )) : <div className="event-log-empty">No key moments were available for this post. Check the original for context.</div>}
+          </div>
+        </section>
+        <ContractScorecard analysis={analysis} insights={insights} />
+        {creativeSegments.length > 0 && <section className="report-block" aria-labelledby="creative-title">
+          <div className="report-block-heading"><div><span className="mono eyebrow">HOW THE VIDEO UNFOLDS</span><h2 id="creative-title">Creative breakdown</h2></div><p>A map of the post from the opening hook to the closing message.</p></div>
+          <div className="creative-timeline-track" aria-label="Video sections by time">
+            {creativeSegments.map((segment, index) => <div className="creative-timeline-segment" key={`${segment.start}-${index}`} style={{left:`${Math.max(0, segment.start / creativeDuration * 100)}%`, width:`${Math.max(1, (segment.end - segment.start) / creativeDuration * 100)}%`}} title={`${segment.label}: ${formatTime(segment.start)} to ${formatTime(segment.end)}`}>{segment.label}</div>)}
+          </div>
+          <div className="creative-segment-list">{creativeSegments.map((segment, index) => <div className="creative-segment" key={`${segment.start}-${index}`}><span className="mono">{formatTime(segment.start)}–{formatTime(segment.end)}</span><strong>{segment.label}</strong>{segment.text && <p>{segment.text}</p>}</div>)}</div>
+        </section>}
+        <div className="report-evidence-tail"><EvidenceReview key={analysis.videoUrl + analysis.fetchedAt} analysis={analysis} insights={insights} /></div>
         {analysis.caption && <section className="transcript-section" style={{paddingBottom:60}} aria-labelledby="caption-title"><div><span className="mono eyebrow">POST CAPTION</span><h2 id="caption-title" className="serif">What the caption says</h2></div><div style={{borderTop:'1px solid var(--line)', paddingTop:22, lineHeight:1.7, whiteSpace:'pre-wrap'}} data-testid="text-caption">{analysis.caption}</div></section>}
       </div>
       <section className="limitations-section" aria-labelledby="limits-title"><div className="container limitations-layout">
