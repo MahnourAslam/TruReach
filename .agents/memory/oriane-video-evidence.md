@@ -8,3 +8,9 @@ Oriane's full content result supplies timecoded transcript chunks, engagement, a
 **Why:** A video file is needed for true HTML5 playback synchronization, but sampled frames alone cannot prove exact continuous logo visibility or reliably track playback of a third-party embed.
 
 **How to apply:** Label visual similarity as candidate evidence, distinguish each frame's sample timestamp from the review playhead, and only add synchronized HTML5 playback if the team provides a rights-cleared source video.
+
+For deliverable reviews, keep example contract criteria separate from a real campaign agreement. Do not turn sampled-frame estimates into a pass/fail for a visibility threshold, or infer watch time, link clicks, code uses, or attributed sales from video analysis.
+
+**Why:** The intended pitch compares creative compliance with campaign performance, but these are different evidence sources. Presenting an illustrative contract or brand-side outcomes as measured facts would make the demo misleading.
+
+**How to apply:** Label example criteria as illustrative, attribute indexed public engagement to Oriane, and show unavailable creator analytics and brand tracking as requiring their respective data connections.

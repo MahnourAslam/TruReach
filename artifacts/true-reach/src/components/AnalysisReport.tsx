@@ -1,18 +1,15 @@
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import type { AnalysisResult } from '@workspace/api-client-react';
+import { ContractScorecard } from './ContractScorecard';
 import { EvidenceReview } from './EvidenceReview';
-import { formatDate, formatNumber, formatTime } from '../types/analysis';
+import { formatDate, formatNumber } from '../types/analysis';
 import { getExposureInsights } from '../types/exposure';
 
 type Props = { analysis: AnalysisResult; onBack: () => void; isExample: boolean };
 
 export function AnalysisReport({ analysis, onBack, isExample }: Props) {
-  const { summary, engagement } = analysis;
+  const { summary } = analysis;
   const insights = getExposureInsights(analysis);
-  const metrics = [
-    ['Views', engagement.views], ['Likes', engagement.likes], ['Comments', engagement.comments],
-    ['Shares', engagement.shares], ['Interactions', engagement.interactions],
-  ] as const;
 
   return (
     <main>
@@ -32,17 +29,14 @@ export function AnalysisReport({ analysis, onBack, isExample }: Props) {
         </div>
       </div>
       <div className="container report-body">
+        <ContractScorecard analysis={analysis} insights={insights} />
         <section className="summary-section" aria-labelledby="summary-title">
-           <div className="section-title-row"><h2 id="summary-title">Product exposure <span className="serif" style={{color:'var(--rust)'}}> / demo readout</span></h2><p className="mono">ESTIMATES FROM SOURCE SAMPLES · REVIEW BEFORE CLAIMING VISIBILITY</p></div>
+            <div className="section-title-row"><h2 id="summary-title">Evidence details <span className="serif" style={{color:'var(--rust)'}}> / exposure</span></h2><p className="mono">ESTIMATES FROM SOURCE SAMPLES · REVIEW BEFORE CLAIMING VISIBILITY</p></div>
           <div className="summary-grid">
             <div className="stat stat-feature"><span className="mono">01 / ON-SCREEN SIGNAL</span><div><div className="stat-value" data-testid="text-visual-estimate">{insights.visualEstimatedSeconds == null ? '—' : `~${insights.visualEstimatedSeconds.toFixed(1)}s`}</div><span className="stat-label">{insights.visualEstimatedSeconds == null ? 'Not enough consecutive matched frames to estimate' : 'Estimated brand-reference match; product or logo not confirmed'}</span></div></div>
             <div className="stat"><span className="mono">02 / PRODUCT-FOCUSED TALK</span><div><div className="stat-value" data-testid="text-product-talk">{insights.productSpeechSeconds == null ? '—' : `~${insights.productSpeechSeconds.toFixed(1)}s`}</div><span className="stat-label">Inferred use, comparison or benefits; company backstory excluded</span></div></div>
             <div className="stat"><span className="mono">03 / VISUAL CHECK</span><div><div className="stat-value" data-testid="text-visual-candidates">{analysis.brand ? formatNumber(insights.matchedSampleCount) : '—'}<small> frames</small></div><span className="stat-label">Similarity candidates to inspect; not verified logo detections</span></div></div>
             <div className="stat"><span className="mono">04 / WHAT'S MEASURED</span><div><div className="stat-value stat-word">Sampled</div><span className="stat-label">Exact product/logo screen time requires the full video</span></div></div>
-          </div>
-          <div className="engagement-strip" aria-label="Source-reported engagement">
-            {metrics.map(([label, value]) => <div className="engagement-cell" key={label}><span className="mono">{label}</span><strong data-testid={`text-engagement-${label.toLowerCase()}`}>{formatNumber(value)}</strong></div>)}
-            <div className="engagement-cell"><span className="mono">ENGAGEMENT / VIEWS</span><strong data-testid="text-engagement-rate">{engagement.engagementRatePerViews == null ? 'Not available' : `${engagement.engagementRatePerViews.toLocaleString('en-US', {maximumFractionDigits:2})}%`}</strong></div>
           </div>
         </section>
         <EvidenceReview key={analysis.videoUrl + analysis.fetchedAt} analysis={analysis} insights={insights} />
