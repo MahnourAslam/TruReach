@@ -1,0 +1,144 @@
+We need to clarify the MVP before changing the application. Do not start building yet.
+
+PRODUCT DEFINITION
+
+Creator Sponsorship Analyzer automates the manual review brands and agencies perform after a creator submits a sponsored video.
+
+The product answers:
+
+“Did the creator deliver the content requirements agreed with the brand, and where is the evidence in the video?”
+
+This is different from conventional social-media analytics.
+
+TikTok analytics answer:
+“How did the video perform?”
+
+Examples:
+- views
+- reach
+- watch time
+- likes
+- comments
+- shares
+- saves
+- clicks
+- conversions
+- sales
+
+Our Oriane-powered analysis answers:
+“What did the video actually contain?”
+
+Examples:
+- product appeared
+- product visibility time
+- first product appearance
+- logo appeared
+- brand name was spoken
+- brand name appeared on screen
+- required message was included
+- discount code appeared
+- CTA was included
+- product demonstration occurred
+- disclosure or permit number appeared
+- video met timing and duration requirements
+
+These new video-content metrics complement social-media performance metrics. They do not replace them.
+
+MVP STRATEGY
+
+For the hackathon, the product does not need to support every TikTok.
+
+It must work accurately and consistently with 3–5 selected demo videos that we choose and test in advance.
+
+Use a reliable uploaded-video or hosted-video fallback if TikTok embeds or downloads are unstable.
+
+Accuracy and evidence are more important than broad URL support.
+
+PROPOSED MVP WORKFLOW
+
+1. The brand creates a simple delivery checklist before the video is submitted.
+2. The creator submits a video or supported URL.
+3. Oriane analyzes the actual video.
+4. The application compares Oriane’s evidence against the checklist.
+5. Every requirement receives one status:
+   - Delivered
+   - Not found
+   - Needs review
+6. The result includes timestamps, transcript evidence, visual evidence, and any estimated durations.
+7. A reviewer can click an item to seek to the relevant video moment.
+8. The application produces an auditable delivery summary for human approval.
+
+EXAMPLE REQUIREMENTS
+
+- Product must appear within the first 5 seconds.
+- Product must remain clearly visible for at least 5 seconds.
+- Creator must mention the brand verbally.
+- Creator must include the required CTA.
+- Discount code must appear on screen.
+- Required ad disclosure or permit number must appear.
+
+IMPORTANT ACCURACY RULES
+
+Do not claim Oriane provides information that its API does not provide.
+
+Before implementation:
+
+- Inspect the real Oriane response for our selected videos.
+- Save representative raw responses for development and testing.
+- Identify which proposed checks Oriane supports directly.
+- Identify which checks require inference.
+- Identify which checks are currently unavailable.
+- If Oriane returns matching frames rather than continuous visibility, group nearby frames into estimated visibility windows.
+- Label inferred durations as estimates.
+- Include confidence or “Needs review” when evidence is uncertain.
+- Never fabricate a successful result.
+
+We will manually annotate the selected demo videos with expected timestamps. This manual ground truth is only for validating accuracy during development. The finished product should automate the review.
+
+SOCIAL-MEDIA METRICS
+
+Do not make TikTok analytics integration a dependency for the MVP.
+
+The interface may display mock or manually supplied performance metrics for context, but label them clearly.
+
+Keep these groups separate:
+
+1. Performance metrics
+Views, reach, engagement, watch time, clicks, conversions, and revenue.
+
+2. Oriane video metrics
+Product, logo, speech, on-screen text, CTA, required messages, timing, visibility, and demonstrations.
+
+3. Contract evaluation
+Whether the detected video evidence satisfies each campaign requirement.
+
+SCOPE LIMITS
+
+Do not build:
+- automated payments or escrow release
+- creator fee recommendations
+- legal compliance decisions
+- automatic contract parsing
+- authentication
+- campaign-management dashboards
+- support for every TikTok URL
+- cross-campaign benchmarking
+
+The application supports human review. It does not automatically approve payment or provide legal advice.
+
+BEFORE WRITING CODE
+
+Reply with:
+
+1. Your understanding of the MVP in one paragraph.
+2. The exact inputs the application needs.
+3. The exact normalized output fields you propose.
+4. A table showing which checks are:
+   - directly supported by Oriane
+   - estimated or inferred
+   - unsupported or still unknown
+5. How you will validate accuracy against the selected demo videos.
+6. What the current application already supports and what must change.
+7. A short implementation plan.
+
+Wait for approval before making implementation changes.
