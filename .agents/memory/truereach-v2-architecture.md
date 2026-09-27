@@ -1,30 +1,28 @@
 ---
 name: TrueReach v2 architecture
-description: What changed for v2, where the new code lives, and what must stay intact for v1.
+description: What v2 is, how it differs from v1, and the key decisions behind the rebuild.
 ---
 
-## Rule
-Keep v1 untouched, but treat its video-and-evidence review experience as the starting point for v2 rather than designing a replacement report. The user values watching the source alongside the analysis and prioritizes in-video exposure over engagement metrics.
+## What v2 is
+A separate artifact at `/true-reach-v2/`. V1 at `/true-reach/` is never touched. Both share the same `artifacts/api-server`.
 
-**Why:** The standalone v2 report removed the source player and centered public engagement figures, which the user explicitly found worse than the original experience.
+## Source layout
+v2 `src/` was rebuilt by copying every file from v1 verbatim, then layering improvements on top. Files kept from v2 scaffold (not replaced): `main.tsx`, `components/error-boundary.tsx`, `components/ui/`, `hooks/`, `lib/utils.ts`.
 
-**How to apply:** When revising v2, bring the existing review interaction into the separate artifact and place delivery evidence beside it. Distinguish sampled-frame similarity and estimated windows from actual logo visibility duration or full/partial visibility; those cannot be established from the current Oriane snapshot alone.
+## v2 improvements applied
+1. **ContractRequirements form** in `Landing.tsx` — collapsible panel below the URL form. Pre-fills CeraVe defaults when "Try example campaign" is clicked. Comma-separated fields for brandVariants and competitors.
+2. **Requirements passed through `useAnalyzeVideo`** — App.tsx holds `requirements` state, passes as `{ requirements }` in the mutation data object.
+3. **ContractScorecard replaced** — new two-column Performance vs Delivery layout. Left = muted Oriane engagement metrics + greyed "Connect analytics" rows. Right = `analysis.deliveryChecks` rows with colored status pills (verified/not_detected/flag/unknown) and timestamp chips.
+4. **Verdict banner** in `AnalysisReport.tsx` — counts verified/not_detected/flag from `deliveryChecks`; shows a one-line recommendation ("Hold for review" or "Ready for payment review"). Hidden when deliveryChecks is empty.
+5. **Updated footer** — "THIS REPORT INFORMS PAYMENT REVIEW — IT DOES NOT SET OR REDUCE THE CREATOR'S FEE."
+6. **Visual threshold 0.85, gap 1.5s** in `types/exposure.ts` (v1 uses 0.80 / 0.8s). Matches the backend delivery engine.
 
-## Key files
+## Key type
+`DeliveryCheck` and `ContractRequirements` are defined locally in `src/types/delivery.ts`. `analysis.deliveryChecks` is accessed via a cast (`AnalysisWithChecks`) because the generated client type may not include it yet.
 
-- `artifacts/api-server/src/services/fixture.ts` — inline CeraVe fixture data (IndexedVideo + OrianeFrame[]). Used as demo-safety fallback on any Oriane failure. Inlined as TS constants to avoid esbuild path issues.
-- `artifacts/api-server/src/services/normalize-analysis.ts` — delivery checks engine (11 checks). Visual similarity threshold v2 = 0.85, grouping window = 1.5s. Shared with v1 but v1 doesn't send requirements so it always gets an empty deliveryChecks array.
-- `artifacts/api-server/src/routes/analysis.ts` — fixture fallback pattern: try Oriane, catch ANY error (incl. 404/unindexed), serve fixture. `ORIANE_FORCE_FIXTURE=true` env var skips live call entirely.
-- `lib/api-spec/openapi.yaml` — added ContractRequirements, DeliveryCheckStatus, DeliveryCheckTimestamp, DeliveryCheck schemas; `source` enum = [oriane, fixture]; `deliveryChecks` required array on AnalysisResult.
-- `artifacts/true-reach-v2/` — new react-vite artifact at /true-reach-v2/. Built by design subagent with editorial aesthetic (mineral paper, petrol ink, terracotta accents, Instrument Serif + DM Sans).
+## Curly-quote gotcha
+The SourceVideo.tsx disclaimer strings use curly Unicode apostrophes (') in v1. These break Babel JSX parsing when used inside single-quoted string literals. Fix: assign the string to a variable above the JSX return, using regular `"..."` delimiters with unicode escapes.
 
-## Delivery check IDs (in order)
-brand_verbal, brand_first_mention, product_shown, product_first_appear, brand_in_caption, required_phrase, discount_code, cta, ad_disclosure, competitors, video_duration
+**Why:** JSX string literal parsing treats the curly right-single-quote (U+2019) as a closing quote delimiter.
 
-**Why:** brand_verbal and brand_first_mention only run when `brand` is set. product_shown and product_first_appear only run when `requirements.productShown !== false && brand`. ad_disclosure only runs when `requirements.disclosureRequired`. competitors only runs when competitors list is non-empty.
-
-## Status semantics
-verified = evidence found; not_detected = checked, nothing found; flag = reviewer should confirm; unknown = required data (transcript/caption) was null. Never treat unknown as not_detected.
-
-## CeraVe fixture visual frames
-8 frames have similarity scores (stored in FIXTURE_VISUAL_FRAMES). Frames at 4.13–4.57s cluster into one window (~0.85–0.95 scores). Frame at 24.9s is isolated with score 0.99. Both windows > 0.85 threshold → product_shown = verified.
+**How to apply:** Any time you copy string content from v1 that contains typographic quotes into a JSX expression, extract to a variable with double quotes or use `\u2019`.
