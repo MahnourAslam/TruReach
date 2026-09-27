@@ -4,7 +4,11 @@ description: What changed for v2, where the new code lives, and what must stay i
 ---
 
 ## Rule
-v1 (`artifacts/true-reach/`) must never be touched. All backend additions to the shared API server are additive and non-breaking: new optional fields, new `deliveryChecks` array (always present, empty when no requirements sent), `source` enum now includes `fixture`.
+Keep v1 untouched, but treat its video-and-evidence review experience as the starting point for v2 rather than designing a replacement report. The user values watching the source alongside the analysis and prioritizes in-video exposure over engagement metrics.
+
+**Why:** The standalone v2 report removed the source player and centered public engagement figures, which the user explicitly found worse than the original experience.
+
+**How to apply:** When revising v2, bring the existing review interaction into the separate artifact and place delivery evidence beside it. Distinguish sampled-frame similarity and estimated windows from actual logo visibility duration or full/partial visibility; those cannot be established from the current Oriane snapshot alone.
 
 ## Key files
 
