@@ -60,7 +60,7 @@ export function AnalysisReport({ analysis, onBack, isExample }: Props) {
       <div className="container report-top">
         <button className="back-btn mono" onClick={onBack} type="button" data-testid="button-new-analysis"><ArrowLeft size={15} /> NEW ANALYSIS</button>
         <div className="report-intro">
-          <div><span className="mono eyebrow">{analysis.platform.toUpperCase()} POST REPORT</span><h1 className="serif">Did they <em>deliver?</em></h1></div>
+          <div><span className="mono eyebrow">{analysis.platform.toUpperCase()} POST REPORT</span><h1 className="serif">Post <em>report</em></h1></div>
           <div className="report-meta"><span className="source-pill mono" data-testid="text-source"><i /> Live analysis</span></div>
         </div>
         <div className="report-subline">
