@@ -1,3 +1,4 @@
 - [Oriane API authentication](oriane-api-authentication.md) — Oriane's REST docs omit auth details; server requests use the API key as a Bearer token.
 - [Oriane video evidence limits](oriane-video-evidence.md) — Oriane returns sampled frames, not a playable source file; keep source playback separate from frame-based timing claims.
 - [TrueReach v2 architecture](truereach-v2-architecture.md) — v2 is a separate artifact at /true-reach-v2/; backend delivery-checks engine and fixture fallback live in the shared API server.
+- [AI pipeline architecture](ai-pipeline-architecture.md) — yt-dlp + ffmpeg + OpenAI (transcription + vision) pipeline for non-Oriane videos; replaces the fixture fallback.

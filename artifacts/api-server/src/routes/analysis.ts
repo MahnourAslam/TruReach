@@ -19,6 +19,7 @@ import {
 } from "../services/oriane";
 import { normalizeAnalysis, type ContractRequirements } from "../services/normalize-analysis";
 import { getFixture } from "../services/fixture";
+import { runAIPipeline } from "../services/ai-pipeline";
 
 const router: IRouter = Router();
 
@@ -84,22 +85,37 @@ router.post("/analysis", async (req, res): Promise<void> => {
 
     const content = await findIndexedVideo(source.platform, source.platformId);
     if (!content) {
-      // This URL is not in Oriane's index — fall back to fixture so demo never errors
-      req.log.warn({ videoUrl: source.videoUrl }, "Video not indexed; serving fixture");
-      const fixture = getFixture();
-      res.json(
-        AnalyzeVideoResponse.parse(
-          normalizeAnalysis(fixture.content, {
-            videoUrl: source.videoUrl,
-            brand,
-            visualFrames: fixture.visualFrames,
-            reference: "logo",
-            limitations: ["This video is not yet indexed by Oriane; the report below uses the pre-loaded CeraVe example."],
-            source: "fixture",
-            requirements,
-          }),
-        ),
-      );
+      // This URL is not in Oriane's index — run the AI pipeline
+      req.log.info({ videoUrl: source.videoUrl }, "Video not indexed in Oriane; running AI pipeline");
+      try {
+        const aiResult = await runAIPipeline({
+          videoUrl: source.videoUrl,
+          brand,
+          requirements,
+        });
+        res.json(AnalyzeVideoResponse.parse(aiResult));
+      } catch (aiError) {
+        req.log.warn(
+          { videoUrl: source.videoUrl, err: aiError instanceof Error ? aiError.message : String(aiError) },
+          "AI pipeline failed; serving fixture",
+        );
+        const fixture = getFixture();
+        res.json(
+          AnalyzeVideoResponse.parse(
+            normalizeAnalysis(fixture.content, {
+              videoUrl: source.videoUrl,
+              brand,
+              visualFrames: fixture.visualFrames,
+              reference: "logo",
+              limitations: [
+                "This video is not indexed by Oriane and the AI pipeline was unavailable. The report below uses the pre-loaded CeraVe example.",
+              ],
+              source: "fixture",
+              requirements,
+            }),
+          ),
+        );
+      }
       return;
     }
 

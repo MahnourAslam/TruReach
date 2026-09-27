@@ -218,7 +218,7 @@ components:
       properties:
         source:
           type: string
-          enum: [oriane, fixture]
+          enum: [oriane, fixture, ai]
         fetchedAt: { type: string, format: date-time }
         videoUrl: { type: string }
         platform: { type: string }

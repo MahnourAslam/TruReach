@@ -56,7 +56,7 @@ export const AnalyzeVideoBody = zod.object({
 })
 
 export const AnalyzeVideoResponse = zod.object({
-  "source": zod.enum(['oriane', 'fixture']),
+  "source": zod.enum(['oriane', 'fixture', 'ai']),
   "fetchedAt": zod.coerce.date(),
   "videoUrl": zod.string(),
   "platform": zod.string(),
