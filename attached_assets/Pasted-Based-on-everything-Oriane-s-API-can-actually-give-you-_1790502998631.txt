@@ -1,0 +1,67 @@
+Based on everything Oriane's API can actually give you, here are the metrics that should drive your payment/valuation logic:
+
+Core metrics (per video)
+Integration Score (Full / Partial / Token / Insufficient data) — the qualitative read: did the brand get real integration or a flash mention
+Verbal mention count + position — was it said once or repeatedly, early (more prominent) or buried at the end
+Visual match count + timestamps — how many distinct visual appearances, and roughly when (from visualSimilarity matched frames)
+Caption presence — yes/no, and whether it's a dedicated post or a group tag
+Views — raw reach
+Engagement rate — likes/comments/saves relative to views or followers — this tells you if the audience actually responded to the content, not just saw it
+Publish date / recency — older sponsored content decays in relevance for a rate card
+The composite metric — your actual pricing signal
+
+Combine reach × integration into one number, something like:
+
+Effective Exposure Score = Views × Integration Weight
+
+Full integration = 1.0 weight
+Partial = 0.6
+Token = 0.25
+Insufficient data = excluded from the calc, flagged separately
+
+So two creators with identical 500K views produce very different scores — one delivering "500K effective exposure," the other only "125K effective exposure" because it was a token flash. This is your headline insight — it directly answers "did the brand get what they paid for relative to reach."
+
+Then layer in performance correlation
+
+Show average engagement rate per integration tier across the creator's history — this is the proof point: "Full integration posts average 6.2% engagement vs 2.1% for Token posts." That's the number that justifies why brands should pay more for full integration, not just that they should.
+
+What to explicitly NOT claim
+Don't output a literal dollar recommendation ("this post is worth $4,200") — you have no real market pricing data feeding that, and a fabricated number is the fastest way to lose credibility with Amal, who knows real rate cards
+Instead, frame it as a relative/comparative signal: "this creator's Full-integration rate is 78%, above the category average" — descriptive, not prescriptive pricing
+
+Want me to turn this into the actual field-by-field data contract (JSON shape) so your teammates can start building against it right now?
+
+wait i need to know how are cotnent creater paid and i need cotnext first before continueing the idea
+
+Here's the actual landscape of how creators get paid, broken into the models brands use:
+
+1. Flat/fixed fee (most common for brand deals)
+
+A set price per deliverable, agreed before anything is posted. Usually based on:
+
+Follower count / average views — often via a rough CPM: (expected views ÷ 1,000) × agreed CPM rate
+Engagement rate — a smaller but highly engaged audience can command more than a bigger passive one
+Niche/vertical — beauty, finance, tech creators often price differently than lifestyle
+Platform — TikTok vs Instagram vs YouTube have different going rates
+Content type — a single Story is cheaper than a dedicated video; a 60-sec integration costs more than a group/brand-tag post
+Usage rights & exclusivity — can the brand reuse the content in ads? Is the creator barred from competitor deals for a period? Both push price up
+2. Performance-based / affiliate
+
+Creator earns per outcome, not per post:
+
+Commission per sale (affiliate link or unique discount code)
+Cost-per-click on a tracked link
+Bonuses for hitting view or sales thresholds
+This is how brands measure ROI after the post — promo codes are one of the most common attribution tools
+3. Hybrid (increasingly the norm)
+
+Flat fee + performance kicker — creator gets guaranteed pay regardless, plus upside if the content actually converts. This is brands hedging: they pay for reach up front, but reward real results on top.
+
+4. Platform-native monetization (separate from brand deals)
+Creator funds / bonus programs (TikTok Creativity Program, YouTube ad revenue, Instagram bonuses) — paid directly by the platform based on views/watch time, not brand-negotiated
+Subscriptions/fan support (Patreon, channel memberships, TikTok gifts) — fans pay directly
+The gap your idea sits in
+
+Notice: none of these payment models actually verify what happened inside the video. Flat fees are priced on expected reach before the post exists. Performance-based pay tracks sales, not integration quality. Nobody's pricing model currently asks "did the creator actually say the brand name, show the product clearly, and write it in the caption — or just flash it once?" That's the exact gap TrueReach fills: not replacing these payment models, but adding a missing verification layer that sits between the flat fee and the performance metrics — proving whether the flat fee was justified by what was actually delivered.
+
+Does this context change anything about the direction, or are you ready to keep building on TrueReach?
