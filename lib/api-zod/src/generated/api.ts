@@ -36,15 +36,27 @@ export const analyzeVideoBodyVideoUrlMax = 500;
 
 export const analyzeVideoBodyBrandMax = 80;
 
-
+export const analyzeVideoBodyRequirementsMinMentionsDefault = 2;
 
 export const AnalyzeVideoBody = zod.object({
   "videoUrl": zod.string().url().max(analyzeVideoBodyVideoUrlMax),
-  "brand": zod.string().max(analyzeVideoBodyBrandMax).optional()
+  "brand": zod.string().max(analyzeVideoBodyBrandMax).optional(),
+  "requirements": zod.object({
+  "brandVariants": zod.array(zod.string()).optional().describe('Accepted spellings of the brand name, including the primary brand value.'),
+  "minMentions": zod.number().int().default(analyzeVideoBodyRequirementsMinMentionsDefault).describe('Minimum number of verbal brand mentions required.'),
+  "productShown": zod.boolean().optional().describe('Whether the product or logo must appear on screen.'),
+  "disclosureRequired": zod.boolean().optional().describe('Whether an ad disclosure (#ad, #sponsored, etc.) is required.'),
+  "competitors": zod.array(zod.string()).optional().describe('Competitor brand names to flag if found in the video.'),
+  "requiredPhrase": zod.string().nullish().describe('A specific phrase that must appear in the transcript.'),
+  "discountCode": zod.string().nullish().describe('A discount or promo code to look for in transcript and caption.'),
+  "requiredCta": zod.string().nullish().describe('A required call-to-action phrase. Defaults to common CTA phrases if null.'),
+  "minDurationSeconds": zod.number().nullish(),
+  "maxDurationSeconds": zod.number().nullish()
+}).optional().describe('Optional delivery requirements to evaluate against. Only checks whose requirement is set are run.')
 })
 
 export const AnalyzeVideoResponse = zod.object({
-  "source": zod.enum(['oriane']),
+  "source": zod.enum(['oriane', 'fixture']),
   "fetchedAt": zod.coerce.date(),
   "videoUrl": zod.string(),
   "platform": zod.string(),
@@ -95,7 +107,17 @@ export const AnalyzeVideoResponse = zod.object({
   "text": zod.string(),
   "inferred": zod.boolean()
 })),
-  "limitations": zod.array(zod.string())
+  "limitations": zod.array(zod.string()),
+  "deliveryChecks": zod.array(zod.object({
+  "id": zod.string(),
+  "label": zod.string(),
+  "status": zod.enum(['verified', 'not_detected', 'flag', 'unknown']).describe('verified=evidence found; not_detected=checked, nothing found; flag=reviewer should confirm; unknown=required data was null'),
+  "detail": zod.string().nullable(),
+  "timestamps": zod.array(zod.object({
+  "start": zod.number(),
+  "end": zod.number().nullish()
+}))
+})).describe('Evaluated delivery checks. Empty array when no requirements were provided.')
 })
 
 

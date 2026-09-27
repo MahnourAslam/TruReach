@@ -8,6 +8,7 @@
 import type { AnalysisEvent } from './analysisEvent';
 import type { AnalysisResultSource } from './analysisResultSource';
 import type { CreativeSegment } from './creativeSegment';
+import type { DeliveryCheck } from './deliveryCheck';
 import type { EngagementEvidence } from './engagementEvidence';
 import type { ExposureSummary } from './exposureSummary';
 import type { FrameEvidence } from './frameEvidence';
@@ -34,4 +35,6 @@ export interface AnalysisResult {
   events: AnalysisEvent[];
   creativeSegments: CreativeSegment[];
   limitations: string[];
+  /** Evaluated delivery checks. Empty array when no requirements were provided. */
+  deliveryChecks: DeliveryCheck[];
 }

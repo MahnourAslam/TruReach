@@ -9,11 +9,47 @@ export interface HealthStatus {
   status: string;
 }
 
+/**
+ * Optional delivery requirements to evaluate against. Only checks whose requirement is set are run.
+ */
+export interface ContractRequirements {
+  /** Accepted spellings of the brand name, including the primary brand value. */
+  brandVariants?: string[];
+  /** Minimum number of verbal brand mentions required. */
+  minMentions?: number;
+  /** Whether the product or logo must appear on screen. */
+  productShown?: boolean;
+  /** Whether an ad disclosure (#ad, #sponsored, etc.) is required. */
+  disclosureRequired?: boolean;
+  /** Competitor brand names to flag if found in the video. */
+  competitors?: string[];
+  /**
+     * A specific phrase that must appear in the transcript.
+     * @nullable
+     */
+  requiredPhrase?: string | null;
+  /**
+     * A discount or promo code to look for in transcript and caption.
+     * @nullable
+     */
+  discountCode?: string | null;
+  /**
+     * A required call-to-action phrase. Defaults to common CTA phrases if null.
+     * @nullable
+     */
+  requiredCta?: string | null;
+  /** @nullable */
+  minDurationSeconds?: number | null;
+  /** @nullable */
+  maxDurationSeconds?: number | null;
+}
+
 export interface AnalysisInput {
   /** @maxLength 500 */
   videoUrl: string;
   /** @maxLength 80 */
   brand?: string;
+  requirements?: ContractRequirements;
 }
 
 export interface AnalysisExample {
@@ -96,11 +132,40 @@ export interface ExposureSummary {
   visualDurationNote: string;
 }
 
+/**
+ * verified=evidence found; not_detected=checked, nothing found; flag=reviewer should confirm; unknown=required data was null
+ */
+export type DeliveryCheckStatus = typeof DeliveryCheckStatus[keyof typeof DeliveryCheckStatus];
+
+
+export const DeliveryCheckStatus = {
+  verified: 'verified',
+  not_detected: 'not_detected',
+  flag: 'flag',
+  unknown: 'unknown',
+} as const;
+
+export interface DeliveryCheckTimestamp {
+  start: number;
+  /** @nullable */
+  end?: number | null;
+}
+
+export interface DeliveryCheck {
+  id: string;
+  label: string;
+  status: DeliveryCheckStatus;
+  /** @nullable */
+  detail: string | null;
+  timestamps: DeliveryCheckTimestamp[];
+}
+
 export type AnalysisResultSource = typeof AnalysisResultSource[keyof typeof AnalysisResultSource];
 
 
 export const AnalysisResultSource = {
   oriane: 'oriane',
+  fixture: 'fixture',
 } as const;
 
 export interface AnalysisResult {
@@ -124,5 +189,7 @@ export interface AnalysisResult {
   events: AnalysisEvent[];
   creativeSegments: CreativeSegment[];
   limitations: string[];
+  /** Evaluated delivery checks. Empty array when no requirements were provided. */
+  deliveryChecks: DeliveryCheck[];
 }
 

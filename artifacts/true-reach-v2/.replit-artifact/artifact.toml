@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/true-reach-v2/"
+title = "TrueReach v2"
+description = "Second version of TrueReach with editable contract requirements, a delivery checks engine (4 statuses: verified/not_detected/flag/unknown), a two-column Performance vs Delivery report layout, and a fixture fallback so the demo always shows data."
+version = "1.0.0"
+id = "artifacts/true-reach-v2"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/true-reach-v2/" ]
+localPort = 24754
+
+[services.development]
+run = "pnpm --filter @workspace/true-reach-v2 run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/true-reach-v2", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/true-reach-v2/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24754"
+BASE_PATH = "/true-reach-v2/"

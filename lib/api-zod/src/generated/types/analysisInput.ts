@@ -5,10 +5,12 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { ContractRequirements } from './contractRequirements';
 
 export interface AnalysisInput {
   /** @maxLength 500 */
   videoUrl: string;
   /** @maxLength 80 */
   brand?: string;
+  requirements?: ContractRequirements;
 }

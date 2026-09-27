@@ -11,4 +11,5 @@ export type AnalysisResultSource = typeof AnalysisResultSource[keyof typeof Anal
 
 export const AnalysisResultSource = {
   oriane: 'oriane',
+  fixture: 'fixture',
 } as const;

@@ -73,6 +73,41 @@ components:
           type: string
       required:
         - status
+    ContractRequirements:
+      type: object
+      description: "Optional delivery requirements to evaluate against. Only checks whose requirement is set are run."
+      properties:
+        brandVariants:
+          type: array
+          items: { type: string }
+          description: "Accepted spellings of the brand name, including the primary brand value."
+        minMentions:
+          type: integer
+          default: 2
+          description: "Minimum number of verbal brand mentions required."
+        productShown:
+          type: boolean
+          description: "Whether the product or logo must appear on screen."
+        disclosureRequired:
+          type: boolean
+          description: "Whether an ad disclosure (#ad, #sponsored, etc.) is required."
+        competitors:
+          type: array
+          items: { type: string }
+          description: "Competitor brand names to flag if found in the video."
+        requiredPhrase:
+          type: ["string", "null"]
+          description: "A specific phrase that must appear in the transcript."
+        discountCode:
+          type: ["string", "null"]
+          description: "A discount or promo code to look for in transcript and caption."
+        requiredCta:
+          type: ["string", "null"]
+          description: "A required call-to-action phrase. Defaults to common CTA phrases if null."
+        minDurationSeconds:
+          type: ["number", "null"]
+        maxDurationSeconds:
+          type: ["number", "null"]
     AnalysisInput:
       type: object
       additionalProperties: false
@@ -85,6 +120,8 @@ components:
         brand:
           type: string
           maxLength: 80
+        requirements:
+          $ref: "#/components/schemas/ContractRequirements"
     AnalysisExample:
       type: object
       required: [videoUrl, brand, creator, caption, posterUrl]
@@ -152,11 +189,36 @@ components:
         firstSpokenMentionSeconds: { type: ["number", "null"] }
         captionMentionsBrand: { type: ["boolean", "null"] }
         visualDurationNote: { type: string }
+    DeliveryCheckStatus:
+      type: string
+      enum: [verified, not_detected, flag, unknown]
+      description: "verified=evidence found; not_detected=checked, nothing found; flag=reviewer should confirm; unknown=required data was null"
+    DeliveryCheckTimestamp:
+      type: object
+      required: [start]
+      properties:
+        start: { type: number }
+        end: { type: ["number", "null"] }
+    DeliveryCheck:
+      type: object
+      required: [id, label, status, detail, timestamps]
+      properties:
+        id: { type: string }
+        label: { type: string }
+        status:
+          $ref: "#/components/schemas/DeliveryCheckStatus"
+        detail: { type: ["string", "null"] }
+        timestamps:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeliveryCheckTimestamp"
     AnalysisResult:
       type: object
-      required: [source, fetchedAt, videoUrl, platform, creator, caption, publishedAt, durationSeconds, brand, engagement, summary, transcriptChunks, frames, events, creativeSegments, limitations]
+      required: [source, fetchedAt, videoUrl, platform, creator, caption, publishedAt, durationSeconds, brand, engagement, summary, transcriptChunks, frames, events, creativeSegments, limitations, deliveryChecks]
       properties:
-        source: { type: string, enum: [oriane] }
+        source:
+          type: string
+          enum: [oriane, fixture]
         fetchedAt: { type: string, format: date-time }
         videoUrl: { type: string }
         platform: { type: string }
@@ -188,4 +250,8 @@ components:
         limitations:
           type: array
           items: { type: string }
-
+        deliveryChecks:
+          type: array
+          description: "Evaluated delivery checks. Empty array when no requirements were provided."
+          items:
+            $ref: "#/components/schemas/DeliveryCheck"

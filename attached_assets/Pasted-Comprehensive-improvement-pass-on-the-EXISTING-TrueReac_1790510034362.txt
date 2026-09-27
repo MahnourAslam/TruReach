@@ -1,0 +1,55 @@
+Comprehensive improvement pass on the EXISTING TrueReach project. DO NOT rebuild, reset, or delete working code. The live Oriane integration (artifacts/api-server/src/services/oriane.ts, normalize-analysis.ts) works and MUST keep working. Edit existing files in place across artifacts/api-server/, artifacts/true-reach/, and lib/api-spec/. Each item is tagged [EXISTS → modify] or [NEW → add]. For [EXISTS] items, improve what's there — do not recreate. After each numbered section, run its VERIFY step and report pass/fail in one line before moving on. Go in order.
+
+CONTEXT (use this to guide copy):
+TrueReach uses Oriane — whose core ability is "watch a video like a human, but with AI" — to do two things brands can't do today:
+(1) Automate the manual check a person does by hand (or skips on big campaigns): did the creator actually show the product, say the brand, include the code/CTA?
+(2) Reveal delivery metrics nobody currently calculates because no human could at scale: when the product first appeared, when the brand was first spoken, how many distinct times the logo showed, the exposure pattern across the video.
+Performance metrics (views, reach, sales) are already tracked by other tools. "Delivery" — what the creator actually put in the video — has never been checked automatically. TrueReach outputs an evidence report to INFORM payment review; it never calculates or sets the creator's fee.
+
+1. [NEW] DEMO-SAFETY FIXTURE FALLBACK (do first)
+- attached_assets/oriane-test/cerave-test-report.json is real Oriane output, currently unused at runtime. Wire it in as a fallback.
+- In the analysis service: try the live Oriane call first; on ANY failure (404 unindexed, 502/503, timeout, missing key) fall back to serving this fixture instead of erroring, and set source:"fixture" in the response.
+- Add env flag ORIANE_FORCE_FIXTURE=true that skips the live call entirely and serves the fixture. Normalize the fixture through the SAME normalize-analysis path so the report renders identically to a live result.
+VERIFY: with ORIANE_FORCE_FIXTURE=true the example analyzes end-to-end from fixture data; with it off, a live analysis still works.
+
+2. [EXISTS → modify] MAKE CONTRACT REQUIREMENTS EDITABLE
+The contract checks currently exist but are hardcoded/illustrative (ContractScorecard.tsx, src/types/contract.ts). Make them user-driven instead of recreating them.
+- Add a compact "Contract requirements" panel to the landing form (Landing.tsx), alongside URL + brand: brand name + spelling variants, minimum verbal mentions (default 2), product/logo must be shown (yes/no), ad disclosure required (yes/no), competitor brand names (list), required phrase (optional), discount code (optional), required CTA phrase (optional), video duration range (optional min/max sec).
+- Pre-fill the CeraVe example: brand "CeraVe"; variants ["CeraVe","Cera V"]; min mentions 2; product shown yes; disclosure required yes; competitors ["Cetaphil"]; phrase/code/CTA blank; duration blank.
+- Pass these into POST /api/analysis; the checks read from them instead of hardcoded values. Update lib/api-spec/openapi.yaml and regenerate client/validators.
+VERIFY: editing a requirement in the form changes which checks run and their results in the report.
+
+3. DELIVERY CHECKS ENGINE — four statuses only
+Statuses everywhere: "verified" (evidence found), "not_detected" (checked, nothing found), "flag" (reviewer should confirm), "unknown" (required data null — NEVER treat as not_detected). Only run a check if its requirement is set.
+[EXISTS → modify] Brand mentioned verbally: search transcript chunks for brand+variants; list each mention start–end timestamp; verified if count >= minimum.
+[NEW] First brand mention time: timestamp of first verbal mention.
+[EXISTS → modify] Product/logo shown: keep visual-similarity frames scoring >= 0.85 ONLY (raise from current 0.80); group frames within 1.5s into windows, isolated ones as points; present as ESTIMATED windows labelled "Estimated from sampled frames — not continuous tracking."
+[NEW] Product first-appearance time: earliest timestamp among frames >= 0.85.
+[EXISTS → modify] Brand in caption: verified if brand/hashtag in caption.
+[NEW] Required phrase: if set, search transcript; verified with timestamp if found, else not_detected.
+[NEW] Discount code: if set, search transcript AND caption; verified with location if found.
+[EXISTS → modify] CTA: the current "closing cues" heuristic — tie it to the required CTA input plus defaults ("link in bio","use my code","check out","shop now","swipe up"); verified with timestamp if found.
+[NEW] Ad disclosure (UAE compliance): search caption AND transcript for #ad,#sponsored,#paidpartnership,"paid partnership","sponsored by". not_detected if none. flag if present but NOT in first ~20 chars of caption (buried). Note in UI: UAE National Media Authority rules (mandatory since Feb 2026) require an upfront, spoken ad label.
+[NEW] Competitor/exclusivity: search transcript+caption for competitor list; status "flag" with competitor name + matching transcript quote if found; verified if none.
+[NEW] Video duration: report from metadata; if a range is set, verify it falls inside.
+Do NOT add "brand name written on screen" (needs OCR we haven't tested).
+VERIFY: run the CeraVe example — expect brand-verbal VERIFIED (2 mentions ~0:00 and ~0:14), product/logo VERIFIED (windows incl. ~4.1–4.5s + a point ~24.9s), caption VERIFIED (#cerave), disclosure NOT_DETECTED, competitor FLAG (Cetaphil). Confirm these.
+
+4. [EXISTS → reframe] REPORT: TWO-COLUMN "PERFORMANCE vs DELIVERY"
+The pieces exist (engagement metrics + unavailable-figure labels in AnalysisReport). Rearrange them into an explicit side-by-side layout (stack on mobile):
+- LEFT "Performance (tracked elsewhere)": visually muted/secondary. Real values for what Oriane returns (Views, Likes, Comments, Shares, Engagement). Greyed rows labelled "Connect analytics" for Reach, Watch time, Completion rate, Link clicks, Code uses, Conversions, Sales. Never fabricate numbers.
+- RIGHT "Delivery (what the video contained)": visually primary/hero. The section-3 checks as rows: requirement, evidence (timestamps as small mono chips like 0:13–0:15), colored status pill (green verified / red not_detected / amber flag / grey unknown).
+- One line above both: "Performance is already tracked by a dozen tools. Delivery — what the creator actually put in the video — has never been checked automatically. That's this."
+VERIFY: report shows a faded left column and a populated right column; only enabled checks appear.
+
+5. [EXISTS → modify] VERDICT + FRAMING + HONESTY
+- Verdict summary at top: "(X verified · Y not detected · Z flag)" + plain recommendation, e.g. "Hold for review — ad disclosure absent and a competitor appears in-video."
+- Replace the current limitations footer with: "This report informs the payment review — it does not set or reduce the creator's fee. Visual windows are estimated from sampled frame matches, not continuous tracking."
+- Remove any wording implying certified/continuous product-visibility duration.
+VERIFY: verdict counts match check results; footer present; no overclaiming language remains.
+
+6. LEAVE ALONE
+- Do not fix the TikTok iframe playback (third-party). Keep the "open original post" link.
+- No sign-in, database persistence, or history.
+
+FINAL VERIFY: run the CeraVe example end-to-end in BOTH live and ORIANE_FORCE_FIXTURE modes; confirm identical report structure, correct statuses, two-column layout, nothing crashes. Give a short pass/fail summary for all sections.
