@@ -63,15 +63,15 @@ function TrueReach() {
       <div className="topbar-right mono">{!analysis.isPending && <a href={result ? '#review-title' : '#method-title'} data-testid="link-how-it-works">{result ? 'EXPLORE EVIDENCE' : 'HOW IT WORKS'}</a>}<span className="live-indicator">DELIVERY EVIDENCE VIEW</span></div>
     </header>
     {result ? <AnalysisReport analysis={result} isExample={isExample} onBack={reset} /> :
-      analysis.isPending ? <main className="container loading-report" aria-busy="true" aria-label="Analyzing source post">
-        <span className="mono eyebrow">LIVE SOURCE REVIEW</span>
-        <h1 className="serif loading-headline" id="loading-title">Watch while we <em>check the post.</em></h1>
+      analysis.isPending ? <main className="container loading-report" aria-busy="true" aria-label="Checking creator post">
+        <span className="mono eyebrow">YOUR REPORT IS ON ITS WAY</span>
+        <h1 className="serif loading-headline" id="loading-title">Checking what <em>was delivered.</em></h1>
         <div className="contract-source-layout loading-source-layout">
           <SourceVideo videoUrl={videoUrl} />
           <div className="loading-source-results" role="status" aria-live="polite" data-testid="status-analysis-pending">
-            <span className="mono eyebrow">CONTACTING ORIANE</span>
-            <h2>Retrieving evidence…</h2>
-            <p>The player comes from the platform. Separately, Oriane is returning the post's transcript, sampled frames, and public engagement. Results appear together when the request finishes; this is not live video tracking.</p>
+            <span className="mono eyebrow">CHECKING THE POST</span>
+            <h2>Looking for the moments that matter.</h2>
+            <p>We’re checking the spoken words, selected video frames, caption, and public post numbers. Your report will show what we found and what still needs your eyes.</p>
             <div className="skeleton loading-source-line" /><div className="skeleton loading-source-line" /><div className="skeleton loading-source-line" />
           </div>
         </div>

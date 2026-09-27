@@ -42,24 +42,24 @@ export function EvidenceReview({ analysis, insights }: Props) {
   return (
     <>
       <section className="review-section" aria-labelledby="review-title">
-        <div className="section-title-row"><h2 id="review-title">What happened <span className="serif" style={{color:'var(--rust)'}}> / in the post</span></h2><p className="mono">SELECT A MOMENT TO INSPECT THE SOURCE EVIDENCE</p></div>
+        <div className="section-title-row"><h2 id="review-title">Review the key moments</h2><p>Choose a timestamp to see the frame and transcript.</p></div>
         <div className="insight-panels">
           <div className="insight-panel">
-            <span className="mono eyebrow">ON SCREEN / BRAND-REFERENCE MATCH</span>
-            <h3>Possible product or logo visibility</h3>
-             <p>Oriane supplies frame similarity scores. This view groups at least two adjacent scores ≥0.85 within 1.5s. The first and last timestamps are not a visibility-duration estimate.</p>
+            <span className="mono eyebrow">POSSIBLE ON-SCREEN APPEARANCES</span>
+            <h3>Where the brand may appear</h3>
+             <p>These frames may show your product or logo. Open the original post to confirm what is actually visible and for how long.</p>
             {insights.visualWindows.length ? insights.visualWindows.map((window, index) =>
               <button type="button" className="insight-row visual-insight" key={`${window.start}-${index}`} onClick={() => { setPlaying(false); setShowSourcePlayer(false); seek(window.peak.timestamp); document.getElementById('frame-viewer')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }} data-testid={`button-visual-window-${index}`}>
-                <img src={window.peak.imageUrl} alt={`Candidate source frame sampled at ${window.peak.timestamp.toFixed(1)} seconds`} loading="lazy" />
-                 <span><strong>{window.start.toFixed(2)}–{window.end.toFixed(2)}s <small>sample timestamps</small></strong><em>{window.sampleCount} adjacent matched samples · inspect frame</em></span>
+                 <img src={window.peak.imageUrl} alt={`Checked frame at ${window.peak.timestamp.toFixed(1)} seconds`} loading="lazy" />
+                  <span><strong>{window.start.toFixed(2)}–{window.end.toFixed(2)}s <small>checked moments</small></strong><em>{window.sampleCount} possible frames · view them below</em></span>
                 <ArrowRight size={16} aria-hidden="true" />
               </button>
-             ) : <p className="empty-evidence">No adjacent high-similarity samples were returned. This does not establish that the product was absent.</p>}
+              ) : <p className="empty-evidence">No likely visual appearances were found in the checked frames. That does not prove the product was absent.</p>}
           </div>
           <div className="insight-panel">
-            <span className="mono eyebrow">SPEECH / PRODUCT USE OR COMPARISON</span>
-            <h3>Actually discussing the product</h3>
-            <p>Transcript-based estimate for use, comparison and benefits. Company history and passing name-drops are not counted.</p>
+            <span className="mono eyebrow">WHAT THE CREATOR SAID</span>
+            <h3>Talking about the product</h3>
+            <p>Moments where the transcript suggests the creator discussed using, comparing or benefiting from the product.</p>
             {insights.productSpeechSegments.length ? insights.productSpeechSegments.map((chunk, index) =>
               <button type="button" className="insight-row speech-insight" key={`${chunk.start}-${index}`} onClick={() => { setPlaying(false); setShowSourcePlayer(false); seek(chunk.start); document.getElementById('frame-viewer')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }} data-testid={`button-product-talk-${index}`}>
                 <span className="mono">{chunk.start.toFixed(1)}–{chunk.end.toFixed(1)}s</span>
@@ -71,8 +71,8 @@ export function EvidenceReview({ analysis, insights }: Props) {
         </div>
         <div className="review-layout">
           <div className="viewer" id="frame-viewer">
-            <div className="viewer-heading"><span className="mono">{showSourcePlayer ? 'ORIGINAL POST / TIKTOK' : 'FRAME REVIEW / NOT VIDEO PLAYBACK'}</span><span className="mono">{sortedFrames.length} FRAME{sortedFrames.length === 1 ? '' : 'S'}</span></div>
-            {tiktokId && <button type="button" className="source-toggle mono" onClick={() => { setPlaying(false); setShowSourcePlayer((value) => !value); }}>{showSourcePlayer ? 'VIEW SAMPLED FRAMES' : 'WATCH SOURCE VIDEO'}</button>}
+            <div className="viewer-heading"><span className="mono">{showSourcePlayer ? 'ORIGINAL TIKTOK POST' : 'CHECKED FRAMES · NOT VIDEO PLAYBACK'}</span><span className="mono">{sortedFrames.length} FRAME{sortedFrames.length === 1 ? '' : 'S'}</span></div>
+            {tiktokId && <button type="button" className="source-toggle mono" onClick={() => { setPlaying(false); setShowSourcePlayer((value) => !value); }}>{showSourcePlayer ? 'VIEW CHECKED FRAMES' : 'WATCH ORIGINAL POST'}</button>}
             {showSourcePlayer && tiktokId ? (
               <div className="source-player">
                  <iframe title="Original TikTok video, provided by TikTok" src={`https://www.tiktok.com/player/v1/${tiktokId}?controls=1`} loading="lazy" allow="fullscreen; autoplay; encrypted-media" allowFullScreen />
@@ -80,12 +80,12 @@ export function EvidenceReview({ analysis, insights }: Props) {
               </div>
             ) : (
               <div className="frame-stage" aria-live="polite">
-                {currentFrame ? <img key={currentFrame.imageUrl} src={currentFrame.imageUrl} alt={`Oriane sampled frame at ${formatTime(currentFrame.timestamp)}`} data-testid="image-current-frame" /> : <div className="frame-placeholder">No sampled frames were returned for this post. Timecoded transcript and event evidence remain available.</div>}
-                {currentFrame && <span className="stage-tag mono">NEAREST SAMPLE {formatTime(currentFrame.timestamp)} · {Math.abs(currentFrame.timestamp - time).toFixed(1)}S FROM PLAYHEAD</span>}
+                {currentFrame ? <img key={currentFrame.imageUrl} src={currentFrame.imageUrl} alt={`Checked frame at ${formatTime(currentFrame.timestamp)}`} data-testid="image-current-frame" /> : <div className="frame-placeholder">No frames were available for this post. You can still review the transcript and other moments.</div>}
+                {currentFrame && <span className="stage-tag mono">FRAME AT {formatTime(currentFrame.timestamp)} · {Math.abs(currentFrame.timestamp - time).toFixed(1)}S FROM SELECTED MOMENT</span>}
                 <span className="stage-time mono" data-testid="text-current-time">{formatTime(time)} / {formatTime(duration)}</span>
               </div>
             )}
-            <p className="viewer-note">The timed review displays Oriane's nearest available sampled frame, not continuous footage. The timestamp on each frame can differ from the timeline playhead.</p>
+            <p className="viewer-note">This shows the nearest available still frame, not continuous video. Its time may differ from the selected moment.</p>
           </div>
           <div className="evidence-panel">
             <div className="panel-top"><h3>Moment by moment</h3><button type="button" className="secondary-btn" style={{padding:'5px 0'}} onClick={() => { if (time >= duration) seek(0); setPlaying((value) => !value); }} data-testid="button-play-review" aria-label={playing ? 'Pause timed frame review' : 'Play timed frame review'}>{playing ? <Pause size={15} fill="currentColor" /> : <Play size={15} fill="currentColor" />} {playing ? 'Pause' : 'Review'}</button></div>
@@ -99,14 +99,14 @@ export function EvidenceReview({ analysis, insights }: Props) {
                 <span className="timeline-thumb" style={{left:`${time / duration * 100}%`}} />
                 <input className="timeline-range" data-testid="input-timeline-scrubber" type="range" min="0" max={duration} step=".1" value={time} onChange={(event) => seek(Number(event.target.value))} aria-label="Seek through analyzed post" aria-valuetext={`${formatTime(time)} of ${formatTime(duration)}`} />
               </div>
-              <div className="timeline-legend mono"><span><i /> PRODUCT-FOCUSED SPEECH</span><span><i className="visual" /> VISUAL CANDIDATE</span></div>
+              <div className="timeline-legend mono"><span><i /> PRODUCT DISCUSSION</span><span><i className="visual" /> POSSIBLE APPEARANCE</span></div>
             </div>
-            <div className="events-header mono"><span>SAMPLED VISUAL MATCHES</span><span>{sortedEvents.length} CANDIDATES</span></div>
+            <div className="events-header mono"><span>POSSIBLE ON-SCREEN MOMENTS</span><span>{sortedEvents.length} MOMENTS</span></div>
             <div className="events-list" role="group" aria-label="Timecoded events">
               {sortedEvents.length ? sortedEvents.map((event) =>
                 <button type="button" key={event.id} className={`event-row ${activeEvent?.id === event.id ? 'active' : ''}`} onClick={() => { setPlaying(false); seek(event.start, event.id); }} aria-current={activeEvent?.id === event.id ? 'true' : undefined} data-testid={`button-seek-event-${event.id}`}>
                   <span className="event-time mono">{formatTime(event.start)}</span>
-                  <span><span className="event-label">{event.label}</span><span className="event-text">{event.text || (event.type === 'visual_candidate' ? 'Similarity-based candidate in a sampled frame; not verified logo visibility.' : 'Timecoded observation from source analysis.')}{event.similarityScore != null ? ` · Similarity candidate ${event.similarityScore.toFixed(3)}` : ''}</span></span>
+                  <span><span className="event-label">{event.type === 'visual_candidate' ? 'Possible brand appearance' : event.label}</span><span className="event-text">{event.type === 'visual_candidate' ? 'This frame may show the brand. Check the original post to confirm.' : event.text || 'A moment found in the post.'}</span></span>
                   <ArrowRight size={14} aria-hidden="true" />
                 </button>
               ) : <div className="empty-evidence">No timecoded events were returned by the source for this post.</div>}
@@ -117,7 +117,7 @@ export function EvidenceReview({ analysis, insights }: Props) {
       <details className="transcript-disclosure">
         <summary>Show full transcript <span className="mono">OPTIONAL SOURCE DETAIL</span></summary>
         <section className="transcript-section" aria-labelledby="transcript-title">
-          <div><h2 id="transcript-title" className="serif">Transcript.</h2><p className="aside-note">Select a line to move the frame review to that point in the post. Transcript timing comes from Oriane.</p></div>
+          <div><h2 id="transcript-title" className="serif">What was said</h2><p className="aside-note">Select a line to see a frame near that moment. Automatic transcripts can make mistakes.</p></div>
           <div className="transcript-list">
             {analysis.transcriptChunks.length ? analysis.transcriptChunks.map((chunk, index) =>
               <button className={`transcript-row ${time >= chunk.start && time <= chunk.end ? 'active' : ''}`} type="button" onClick={() => { setPlaying(false); seek(chunk.start); }} key={`${chunk.start}-${index}`} data-testid={`button-seek-transcript-${index}`}><span className="mono">{formatTime(chunk.start)}</span><span>{chunk.text}</span></button>
