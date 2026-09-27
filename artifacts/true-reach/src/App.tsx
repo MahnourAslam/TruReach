@@ -23,10 +23,15 @@ function TrueReach() {
       setError('Enter a full TikTok video or Instagram reel/post URL. Short links are not supported.');
       return;
     }
+    const exampleBrand = example.data && new URL(example.data.videoUrl).pathname === new URL(trimmedUrl).pathname
+      ? example.data.brand
+      : '';
+    const effectiveBrand = candidateBrand.trim() || exampleBrand;
+    if (effectiveBrand && !candidateBrand.trim()) setBrand(effectiveBrand);
     setError(null);
     setResult(null);
     setIsExample(fromExample);
-    analysis.mutate({ data: { videoUrl: trimmedUrl, ...(candidateBrand.trim() ? { brand: candidateBrand.trim() } : {}) } }, {
+    analysis.mutate({ data: { videoUrl: trimmedUrl, ...(effectiveBrand ? { brand: effectiveBrand } : {}) } }, {
       onSuccess: (data) => { setResult(data); window.scrollTo({ top: 0, behavior: 'smooth' }); },
       onError: (cause) => setError(analysisError(cause)),
     });
@@ -47,7 +52,7 @@ function TrueReach() {
     </header>
     {result ? <AnalysisReport analysis={result} isExample={isExample} onBack={reset} /> :
       analysis.isPending ? <main className="container loading-report" aria-busy="true" aria-label="Analyzing source post"><span className="mono eyebrow">CONTACTING EVIDENCE SOURCE</span><div className="skeleton loading-title" /><div className="skeleton loading-sub" /><div className="loading-grid">{[0,1,2,3].map((item) => <div className="skeleton" key={item} />)}</div><div className="skeleton loading-large" /><p style={{color:'var(--soft-ink)', marginTop:20}}>Retrieving post data, transcript, sampled frames, and engagement. This can take a moment.</p></main> :
-        <Landing videoUrl={videoUrl} brand={brand} onVideoUrlChange={(value) => { setVideoUrl(value); if (error) setError(null); }} onBrandChange={setBrand} onAnalyze={() => submit(videoUrl, brand, false)} onExample={() => { if (!example.data) return; setVideoUrl(example.data.videoUrl); setBrand(example.data.brand); submit(example.data.videoUrl, example.data.brand, true); }} example={example.data} exampleLoading={example.isLoading} exampleError={example.isError} onRetryExample={() => example.refetch()} analyzing={analysis.isPending} error={error} />}
+        <Landing videoUrl={videoUrl} brand={brand} onVideoUrlChange={(value) => { setVideoUrl(value); if (!brand.trim() && example.data && isSupportedVideoUrl(value) && new URL(value).pathname === new URL(example.data.videoUrl).pathname) setBrand(example.data.brand); if (error) setError(null); }} onBrandChange={setBrand} onAnalyze={() => submit(videoUrl, brand, false)} onExample={() => { if (!example.data) return; setVideoUrl(example.data.videoUrl); setBrand(example.data.brand); submit(example.data.videoUrl, example.data.brand, true); }} example={example.data} exampleLoading={example.isLoading} exampleError={example.isError} onRetryExample={() => example.refetch()} analyzing={analysis.isPending} error={error} />}
     <footer className="container footer mono"><span>TRUEREACH / A CLOSER LOOK AT CREATOR EVIDENCE</span><span>OBSERVATIONS ARE NOT PROOF OF PAID SPONSORSHIP.</span><span>© {new Date().getFullYear()} TRUE REACH</span></footer>
   </div>;
 }

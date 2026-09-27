@@ -148,7 +148,7 @@ export function normalizeAnalysis(
       firstSpokenMentionSeconds: spokenEvents[0]?.start ?? null,
       captionMentionsBrand: brand ? occurrences(content.caption ?? "", brand) > 0 : null,
       visualDurationNote:
-        "Visibility duration cannot be determined from sampled frames; timestamps are candidate moments, not continuous exposure.",
+        "The on-screen figure is a proxy built from adjacent similarity-matched sampled frames. It does not confirm a product or logo, and exact visibility duration cannot be determined without continuous video.",
     },
     transcriptChunks,
     frames,
@@ -161,6 +161,7 @@ export function normalizeAnalysis(
     limitations: [
       "This is an evidence snapshot, not a determination that a paid sponsorship or contract exists.",
       "Creative segment labels and closing cues are inferred from transcript wording, not Oriane classifications.",
+      "Product-focused speaking time is an estimate inferred from transcript wording; company history and closing cues are excluded, but context may still require human review.",
       "Engagement values reflect Oriane's indexed snapshot and may differ from current platform counts.",
       ...(brand
         ? [

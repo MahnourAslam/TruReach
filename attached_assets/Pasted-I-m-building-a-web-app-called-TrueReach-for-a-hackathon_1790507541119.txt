@@ -1,0 +1,54 @@
+I'm building a web app called TrueReach for a hackathon. It verifies whether a sponsored TikTok/Instagram post delivered what a brand contracted, using Oriane's video-intelligence API. This is a VERIFICATION tool for influencer-marketing agencies — it produces an evidence report, it does NOT calculate or set the creator's fee.
+
+## Core flow (keep it to ONE clean flow)
+1. User enters: a video URL (or picks a demo video), the brand name + spelling variants, and toggles which contract requirements apply.
+2. Backend pulls that post's data from Oriane (or loads a saved JSON fixture — see "Data source" below).
+3. Backend runs 5 checks and returns a structured report.
+4. Frontend renders the report: header stats, a contract-vs-detected checklist, a timeline of where the brand appears, a competitor flag, and a footer note.
+
+## Data source (IMPORTANT for demo safety)
+Build a DATA_SOURCE toggle with two modes:
+- "fixture" (default): read from a local JSON file (I'll provide real Oriane output for the CeraVe demo video). This guarantees the demo works offline.
+- "live": call Oriane's API endpoints (POST /rest/contents/search and the visual similarity search) using an API key stored in Replit Secrets (never hardcode the key).
+Both modes must return the SAME internal shape so the frontend doesn't care which was used. Start with fixture mode fully working before wiring live.
+
+## The 5 checks (each returns status + evidence)
+Status is always one of: "verified" (direct evidence found), "not_detected" (checked, nothing found), "flag" (something a reviewer should confirm), or "unknown" (required data was null/missing — never score this as not_detected).
+
+1. verbal_mention — search the transcript chunks for the brand name + variants. Return each matching chunk's startSeconds/endSeconds. Verified if the required count (e.g. ≥2) is met.
+2. visual_presence — from the visual-similarity frames, keep only frames with score ≥ 0.85. Group frames within 1 second of each other into windows; isolated high-score frames stay as single points. Return the windows/points. Verified if ≥1 strong window.
+3. caption_mention — check if brand name/hashtag appears in the caption text. Verified if present.
+4. disclosure — search caption AND transcript for disclosure terms (#ad, #sponsored, #paidpartnership, "paid partnership", "sponsored by", "in partnership with"). Return not_detected if none found. Also check placement: is the disclosure term in the first ~20 chars of the caption (upfront) or buried? Flag if present-but-buried.
+5. competitor_check — search transcript + caption for a provided list of competitor names. If any found, status = "flag" with the competitor name and the matching transcript quote. If none, verified.
+
+## Report JSON shape (backend returns this)
+{
+  "post": { "creator": "@handle", "platform": "tiktok", "url": "...", "publishedAt": "...", "durationSeconds": 27 },
+  "brand": "CeraVe",
+  "stats": { "views": 57400, "engagementRate": 0.0226, "interactions": 1300 },
+  "checks": [
+    { "type": "verbal_mention", "status": "verified", "required": "≥2", "evidence": { "windows": [[0.02,2.66],[13.74,15.34]] } },
+    { "type": "visual_presence", "status": "verified", "evidence": { "windows": [[0.03,4.53]], "points": [24.9] } },
+    { "type": "caption_mention", "status": "verified", "evidence": { "match": "#cerave" } },
+    { "type": "disclosure", "status": "not_detected", "evidence": null },
+    { "type": "competitor_check", "status": "flag", "evidence": { "competitor": "Cetaphil", "quote": "..." } }
+  ],
+  "summary": { "verified": 3, "not_detected": 1, "flag": 1, "recommendation": "Hold for review — disclosure absent and a competitor appears in-video." }
+}
+
+## Frontend (single report page, clean analytics-tool look)
+- Header card: creator × brand title, platform + publish date, and stat tiles (views, engagement %, duration, interactions).
+- Verdict box: "3 verified · 1 missing · 1 flag" with a plain-language recommendation.
+- Contract → Detected checklist: one row per check showing the contracted requirement, the evidence detected (timestamps shown as small mono chips like "0:00–0:03"), and a colored status pill (green verified / red not detected / amber flag).
+- Timeline: a horizontal bar representing the full video duration (e.g. 27s), with two tracks — "Spoken" (blue blocks at verbal mention windows) and "Visual" (green blocks at logo windows/points). Positions are calculated as percentage of duration. Add a 0:00 → end time axis below.
+- Competitor callout: shows the competitor name and the real transcript quote.
+- Footer note: "This report informs the payment review — it does not set or reduce the creator's fee. Visual windows are estimated from sampled frame matches, not continuous tracking."
+- Must be responsive (works on a phone) and support light + dark mode.
+
+## Tech
+- Simple stack: a Python (Flask/FastAPI) or Node backend + a clean HTML/CSS/JS frontend. No heavy framework needed.
+- Backend endpoint: POST /analyze that takes { url, brand, variants, competitors, requirements } and returns the report JSON.
+- Keep the Oriane API key in Secrets.
+- Include the CeraVe fixture JSON as a file so the app runs end-to-end immediately without any API call.
+
+Start by building fixture mode end-to-end — input form → /analyze reads the CeraVe fixture → renders the full report — so I have a working demo first. Then add live Oriane calls behind the DATA_SOURCE toggle. Build the report rendering to exactly match the structure above.

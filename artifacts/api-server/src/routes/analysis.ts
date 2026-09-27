@@ -51,7 +51,13 @@ router.post("/analysis", async (req, res): Promise<void> => {
     });
     return;
   }
-  const brand = parsed.data.brand || null;
+  // The curated demo post has a known reference brand. A pasted URL must work
+  // even when the optional brand field is left empty.
+  const brand = parsed.data.brand || (
+    source.platform === "tiktok" && source.platformId === EXAMPLE_PLATFORM_ID
+      ? EXAMPLE_BRAND
+      : null
+  );
 
   try {
     const content = await findIndexedVideo(source.platform, source.platformId);
