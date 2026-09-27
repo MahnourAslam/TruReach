@@ -54,8 +54,6 @@ export function AnalysisReport({ analysis, onBack, isExample }: Props) {
       event.type === 'closing_phrase' && (!!event.text?.trim() || !!event.label?.trim())
     ))
     .sort((a, b) => a.start - b.start);
-  const creativeSegments = [...analysis.creativeSegments].filter(segment => Number.isFinite(segment.start) && Number.isFinite(segment.end) && segment.end > segment.start).sort((a, b) => a.start - b.start);
-  const creativeDuration = Math.max(1, analysis.durationSeconds ?? 0, ...creativeSegments.map(segment => segment.end));
 
   return (
     <main>
@@ -100,13 +98,6 @@ export function AnalysisReport({ analysis, onBack, isExample }: Props) {
           </div>
         </section>
         <ContractScorecard analysis={analysis} insights={insights} />
-        {creativeSegments.length > 0 && <section className="report-block" aria-labelledby="creative-title">
-          <div className="report-block-heading"><div><span className="mono eyebrow">HOW THE VIDEO UNFOLDS</span><h2 id="creative-title">Creative breakdown</h2></div><p>A map of the post from the opening hook to the closing message.</p></div>
-          <div className="creative-timeline-track" aria-label="Video sections by time">
-            {creativeSegments.map((segment, index) => <div className="creative-timeline-segment" key={`${segment.start}-${index}`} style={{left:`${Math.max(0, segment.start / creativeDuration * 100)}%`, width:`${Math.max(1, (segment.end - segment.start) / creativeDuration * 100)}%`}} title={`${segment.label}: ${formatTime(segment.start)} to ${formatTime(segment.end)}`}>{segment.label}</div>)}
-          </div>
-          <div className="creative-segment-list">{creativeSegments.map((segment, index) => <div className="creative-segment" key={`${segment.start}-${index}`}><span className="mono">{formatTime(segment.start)}–{formatTime(segment.end)}</span><strong>{segment.label}</strong>{segment.text && <p>{segment.text}</p>}</div>)}</div>
-        </section>}
         <div className="report-evidence-tail"><EvidenceReview key={analysis.videoUrl + analysis.fetchedAt} analysis={analysis} insights={insights} /></div>
         {analysis.caption && <section className="transcript-section" style={{paddingBottom:60}} aria-labelledby="caption-title"><div><span className="mono eyebrow">POST CAPTION</span><h2 id="caption-title" className="serif">What the caption says</h2></div><div style={{borderTop:'1px solid var(--line)', paddingTop:22, lineHeight:1.7, whiteSpace:'pre-wrap'}} data-testid="text-caption">{analysis.caption}</div></section>}
       </div>
