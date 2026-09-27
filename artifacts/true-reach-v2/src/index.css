@@ -555,6 +555,7 @@ body { background:var(--paper); }
 .hero h1 { font-size:clamp(79px,8.8vw,137px); font-weight:900; line-height:.84; letter-spacing:-.092em; margin:38px 0 35px; }
 .hero h1 em { color:var(--rust); font-size:1.11em; }
 .hero-description { font-size:21px; font-weight:500; line-height:1.47; }
+.hero-copy > .section-index + .hero-description { margin-top:38px; }
 .section-index { font-weight:700; color:var(--rust); }
 .section-index .dash { width:42px; height:3px; }
 .form-panel { padding:27px; border:2px solid var(--ink); background:var(--cream); box-shadow:9px 9px 0 var(--ink); }
