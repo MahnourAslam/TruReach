@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: analysis
+    description: Creator video evidence analysis
 paths:
   /healthz:
     get:
@@ -24,6 +26,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /analysis/example:
+    get:
+      operationId: getExampleAnalysis
+      tags: [analysis]
+      summary: Get the curated example post
+      responses:
+        "200":
+          description: Example input and preview information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalysisExample"
+  /analysis:
+    post:
+      operationId: analyzeVideo
+      tags: [analysis]
+      summary: Fetch an indexed video and normalize live Oriane evidence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalysisInput"
+      responses:
+        "200":
+          description: Live normalized analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalysisResult"
+        "400":
+          description: Invalid input
+        "404":
+          description: Video not indexed by Oriane
+        "502":
+          description: Oriane request failed
+        "503":
+          description: Oriane is not configured
 components:
   schemas:
     HealthStatus:
@@ -33,4 +73,119 @@ components:
           type: string
       required:
         - status
+    AnalysisInput:
+      type: object
+      additionalProperties: false
+      required: [videoUrl]
+      properties:
+        videoUrl:
+          type: string
+          format: uri
+          maxLength: 500
+        brand:
+          type: string
+          maxLength: 80
+    AnalysisExample:
+      type: object
+      required: [videoUrl, brand, creator, caption, posterUrl]
+      properties:
+        videoUrl: { type: string }
+        brand: { type: string }
+        creator: { type: string }
+        caption: { type: string }
+        posterUrl: { type: string }
+    EngagementEvidence:
+      type: object
+      required: [views, likes, comments, shares, interactions, engagementRatePerViews]
+      properties:
+        views: { type: ["integer", "null"] }
+        likes: { type: ["integer", "null"] }
+        comments: { type: ["integer", "null"] }
+        shares: { type: ["integer", "null"] }
+        interactions: { type: ["integer", "null"] }
+        engagementRatePerViews:
+          type: ["number", "null"]
+          description: "Percentage points as returned by Oriane; 2.26 represents 2.26%, not a fraction."
+    TranscriptChunk:
+      type: object
+      required: [start, end, text]
+      properties:
+        start: { type: number }
+        end: { type: number }
+        text: { type: string }
+    FrameEvidence:
+      type: object
+      required: [timestamp, imageUrl, similarityScore]
+      properties:
+        timestamp: { type: number }
+        imageUrl: { type: string }
+        similarityScore: { type: ["number", "null"] }
+    AnalysisEvent:
+      type: object
+      required: [id, type, start, end, label, text, imageUrl, similarityScore]
+      properties:
+        id: { type: string }
+        type:
+          type: string
+          enum: [spoken_mention, visual_candidate, closing_phrase]
+        start: { type: number }
+        end: { type: number }
+        label: { type: string }
+        text: { type: ["string", "null"] }
+        imageUrl: { type: ["string", "null"] }
+        similarityScore: { type: ["number", "null"] }
+    CreativeSegment:
+      type: object
+      required: [start, end, label, text, inferred]
+      properties:
+        start: { type: number }
+        end: { type: number }
+        label: { type: string }
+        text: { type: string }
+        inferred: { type: boolean }
+    ExposureSummary:
+      type: object
+      required: [spokenMentionCount, visualCandidateCount, firstSpokenMentionSeconds, captionMentionsBrand, visualDurationNote]
+      properties:
+        spokenMentionCount: { type: integer }
+        visualCandidateCount: { type: integer }
+        firstSpokenMentionSeconds: { type: ["number", "null"] }
+        captionMentionsBrand: { type: ["boolean", "null"] }
+        visualDurationNote: { type: string }
+    AnalysisResult:
+      type: object
+      required: [source, fetchedAt, videoUrl, platform, creator, caption, publishedAt, durationSeconds, brand, engagement, summary, transcriptChunks, frames, events, creativeSegments, limitations]
+      properties:
+        source: { type: string, enum: [oriane] }
+        fetchedAt: { type: string, format: date-time }
+        videoUrl: { type: string }
+        platform: { type: string }
+        creator: { type: string }
+        caption: { type: ["string", "null"] }
+        publishedAt: { type: ["string", "null"], format: date-time }
+        durationSeconds: { type: ["number", "null"] }
+        brand: { type: ["string", "null"] }
+        engagement:
+          $ref: "#/components/schemas/EngagementEvidence"
+        summary:
+          $ref: "#/components/schemas/ExposureSummary"
+        transcriptChunks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TranscriptChunk"
+        frames:
+          type: array
+          items:
+            $ref: "#/components/schemas/FrameEvidence"
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalysisEvent"
+        creativeSegments:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreativeSegment"
+        limitations:
+          type: array
+          items: { type: string }
 

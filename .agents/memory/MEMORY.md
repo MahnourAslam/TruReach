@@ -1,1 +1,2 @@
 - [Oriane API authentication](oriane-api-authentication.md) — Oriane’s REST docs omit auth details; server requests use the API key as a Bearer token.
+- [Oriane video evidence limits](oriane-video-evidence.md) — Oriane returns sampled frames, not a playable source file; keep source playback separate from frame-based timing claims.

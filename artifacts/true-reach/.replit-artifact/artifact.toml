@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "TrueReach"
+description = "A live creator sponsorship exposure demo that analyzes an indexed TikTok or Instagram post with Oriane and presents timestamped speech, visual evidence, and engagement alongside the source video."
+version = "1.0.0"
+id = "artifacts/true-reach"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23613
+
+[services.development]
+run = "pnpm --filter @workspace/true-reach run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/true-reach", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/true-reach/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23613"
+BASE_PATH = "/"
