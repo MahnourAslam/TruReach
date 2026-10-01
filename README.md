@@ -9,12 +9,6 @@
 
 [![Run on Replit](https://replit.com/badge/github/MahnourAslam/TruReach)](https://replit.com/github/MahnourAslam/TruReach)
 
-## Demo
-
-<p align="center">
-  <img src="attached_assets/Screenshot_2026-09-27_at_4.11.31_PM_1790511095173.png" width="650" alt="TrueReach example campaign results with engagement metrics" />
-</p>
-
 ## What TrueReach Does
 
 Brands can see views, likes, and sales after a creator posts, but those numbers do not explain how the brand was integrated into the video. TrueReach reviews the video itself and turns Oriane evidence into a clear delivery record.
