@@ -64,7 +64,7 @@ Available interfaces:
 
 ## Development Commands
 
-For the most reproducible setup, run these commands inside the imported Replit workspace; its configuration supplies the expected Node, pnpm, ports, and system packages.
+Run these commands inside the imported Replit workspace. This original snapshot targets Replit's Linux environment and pnpm 10; its dependency overrides intentionally omit native packages for macOS and Windows.
 
 ```bash
 pnpm install
