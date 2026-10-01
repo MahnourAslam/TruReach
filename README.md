@@ -12,7 +12,7 @@
 ## Demo
 
 <p align="center">
-  <img src="attached_assets/Screenshot_2026-09-27_at_3.08.42_PM_1790507323747.png" width="900" alt="TrueReach timestamped brand-exposure report" />
+  <img src="attached_assets/Screenshot_2026-09-27_at_4.11.31_PM_1790511095173.png" width="650" alt="TrueReach example campaign results with engagement metrics" />
 </p>
 
 ## What TrueReach Does
