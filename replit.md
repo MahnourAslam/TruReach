@@ -1,45 +1,31 @@
-# [Project name]
+# TrueReach
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+TrueReach is a creator-sponsorship evidence tool that compares campaign requirements with timestamped video observations.
 
-## Run & Operate
+## Run and Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- Replit Run starts the API and registered web artifacts.
+- `pnpm run typecheck` validates the complete workspace.
+- `pnpm run build` type-checks and builds all packages.
+- `pnpm --filter @workspace/api-spec run codegen` regenerates clients and Zod schemas after OpenAPI changes.
 
-## Stack
+## Required Configuration
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- Connect the Replit OpenAI AI Integration so the server receives `AI_INTEGRATIONS_OPENAI_BASE_URL` and `AI_INTEGRATIONS_OPENAI_API_KEY`.
+- Store `ORIANE_API_KEY` in Replit Secrets for live Oriane requests.
+- Set `ORIANE_FORCE_FIXTURE=true` when demonstrating the curated fixture.
+- Never expose server credentials to Vite/browser environment variables.
 
-## Where things live
+## Architecture
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/true-reach/`: original interface at `/`.
+- `artifacts/true-reach-v2/`: enhanced delivery-review interface at `/true-reach-v2/`.
+- `artifacts/api-server/`: Express routes, Oriane adapter, normalization, fixture, and AI fallback.
+- `lib/api-spec/openapi.yaml`: API contract source of truth.
+- `lib/api-client-react/` and `lib/api-zod/`: generated consumers.
 
-## Architecture decisions
+The frontend must consume normalized `AnalysisResult` objects rather than raw provider responses. Attribute public engagement to Oriane, label estimated video-derived metrics, and keep unavailable brand-owned metrics such as clicks or conversions distinct.
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+## Demo Notes
 
-## Product
-
-_Describe the high-level user-facing capabilities of this app once they exist._
-
-## User preferences
-
-_Populate as you build — explicit user instructions worth remembering across sessions._
-
-## Gotchas
-
-_Populate as you build — sharp edges, "always run X before Y" rules._
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+The curated CeraVe example is a public post used for illustration; its sponsorship status is not asserted. Oriane provides sampled frames rather than continuous licensed video. Treat visual similarity as candidate evidence and preserve human review.
