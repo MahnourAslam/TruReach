@@ -90,3 +90,5 @@ Contributions are welcome. Create a focused branch, run `pnpm build`, and open a
 ## License
 
 This project is available under the [MIT License](LICENSE).
+
+## Team MNM <3
